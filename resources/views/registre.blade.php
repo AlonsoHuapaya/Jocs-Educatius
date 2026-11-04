@@ -1,10 +1,12 @@
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro | Archivo Histórico</title>
+
+    <title>Registre | Arxiu Històric</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -29,13 +31,14 @@
             min-height: 100vh;
         }
 
-        /* Panel histórico */
+        /* Panell històric */
         .history-panel {
             width: 55%;
             padding: 60px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+
             background:
                 linear-gradient(
                     rgba(15, 15, 13, 0.65),
@@ -43,6 +46,7 @@
                 ),
                 url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=1200')
                 center/cover;
+
             border-right: 1px solid #494537;
         }
 
@@ -108,7 +112,7 @@
             font-size: 17px;
         }
 
-        /* Formulario */
+        /* Formulari */
         .register-panel {
             width: 45%;
             display: flex;
@@ -237,43 +241,47 @@
     <section class="history-panel">
 
         <div class="logo">
-            ARCHIVO <span>HISTÓRICO</span>
+            ARXIU <span>HISTÒRIC</span>
         </div>
 
         <div class="history-content">
+
             <div class="eyebrow">
-                Historia · Memoria · Investigación
+                Història · Memòria · Investigació
             </div>
 
             <h1>
-                El pasado<br>
-                nunca deja<br>
-                de <span>hablar.</span>
+                El passat<br>
+                mai no deixa<br>
+                de <span>parlar.</span>
             </h1>
 
             <p>
-                Explora los acontecimientos que marcaron el siglo XX.
-                Analiza los regímenes totalitarios, sus protagonistas,
-                sus consecuencias y las lecciones que dejaron para
-                las generaciones futuras.
+                Explora els esdeveniments que van marcar el segle XX.
+                Analitza els règims totalitaris, els seus protagonistes,
+                les seves conseqüències i les lliçons que van deixar
+                per a les generacions futures.
             </p>
+
         </div>
 
         <div class="timeline">
+
             <div class="timeline-item">
                 <small>1922</small>
-                <span>Italia fascista</span>
+                <span>Itàlia feixista</span>
             </div>
 
             <div class="timeline-item">
                 <small>1936</small>
-                <span>Guerra Civil Española</span>
+                <span>Guerra Civil Espanyola</span>
             </div>
 
             <div class="timeline-item">
                 <small>1939</small>
-                <span>Segunda Guerra Mundial</span>
+                <span>Segona Guerra Mundial</span>
             </div>
+
         </div>
 
     </section>
@@ -282,13 +290,15 @@
 
         <div class="register-box">
 
-            <div class="eyebrow">Acceso al archivo</div>
+            <div class="eyebrow">
+                Accés a l'arxiu
+            </div>
 
-            <h2>Crear cuenta</h2>
+            <h2>Crear un compte</h2>
 
             <p class="subtitle">
-                Regístrate para acceder a documentos,
-                cronologías y material histórico.
+                Registra't per accedir a documents,
+                cronologies i material històric.
             </p>
 
             @if ($errors->any())
@@ -299,37 +309,41 @@
                 </div>
             @endif
 
-            <form >
+            <form>
+
                 @csrf
 
                 <div class="form-group">
-                    <label for="name">Nombre completo</label>
+                    <label for="name">Nom complet</label>
+
                     <input
                         type="text"
                         id="name"
                         name="name"
                         value="{{ old('name') }}"
-                        placeholder="Tu nombre"
+                        placeholder="El teu nom"
                         required
                         autocomplete="name"
                     >
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Correo electrónico</label>
+                    <label for="email">Correu electrònic</label>
+
                     <input
                         type="email"
                         id="email"
                         name="email"
                         value="{{ old('email') }}"
-                        placeholder="nombre@ejemplo.com"
+                        placeholder="nom@exemple.cat"
                         required
                         autocomplete="email"
                     >
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Contraseña</label>
+                    <label for="password">Contrasenya</label>
+
                     <input
                         type="password"
                         id="password"
@@ -342,31 +356,32 @@
 
                 <div class="form-group">
                     <label for="password_confirmation">
-                        Confirmar contraseña
+                        Confirmació de la contrasenya
                     </label>
+
                     <input
                         type="password"
                         id="password_confirmation"
                         name="password_confirmation"
-                        placeholder="Repite tu contraseña"
+                        placeholder="Repeteix la contrasenya"
                         required
                         autocomplete="new-password"
                     >
                 </div>
 
                 <button type="submit" class="btn-register">
-                    Crear cuenta →
+                    Crear compte →
                 </button>
 
             </form>
 
             <div class="login-link">
-                ¿Ya tienes una cuenta?
-                <a >Iniciar sesión</a>
+                Ja tens un compte?
+                <a >Inicia sessió</a>
             </div>
 
             <div class="footer">
-                ARCHIVO HISTÓRICO · ESTUDIO DEL PASADO
+                ARXIU HISTÒRIC · ESTUDI DEL PASSAT
             </div>
 
         </div>
