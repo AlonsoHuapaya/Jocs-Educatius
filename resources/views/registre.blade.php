@@ -299,7 +299,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register') }}">
+            <form >
                 @csrf
 
                 <div class="form-group">
@@ -362,7 +362,7 @@
 
             <div class="login-link">
                 ¿Ya tienes una cuenta?
-                <a href="{{ route('login') }}">Iniciar sesión</a>
+                <a >Iniciar sesión</a>
             </div>
 
             <div class="footer">
