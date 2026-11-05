@@ -340,7 +340,7 @@
                 </div>
             @endif
 
-            <form>
+            <form action="{{ route('login.dades') }}" method="POST">
 
                 @csrf
 
@@ -405,7 +405,7 @@
 
                 </div>
 
-                <button type="submit" class="btn-login">
+                <button  type="submit" class="btn-login">
                     Iniciar sessió →
                 </button>
 
@@ -414,7 +414,7 @@
             <div class="register-link">
                 Encara no tens un compte?
 
-                <a>
+                <a href="{{ route('vista_registre') }}">
                     Registra't
                 </a>
             </div>

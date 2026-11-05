@@ -309,7 +309,7 @@
                 </div>
             @endif
 
-            <form>
+            <form action="{{ route('registre.store') }}" method="POST">
 
                 @csrf
 
@@ -377,7 +377,7 @@
 
             <div class="login-link">
                 Ja tens un compte?
-                <a >Inicia sessió</a>
+                <a href="{{ route('login') }}">Inicia sessió</a>
             </div>
 
             <div class="footer">

@@ -9,7 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class Usuari extends Authenticatable
 {
   
-protected $table = 'usuaris';
+protected $table = 'usuari';
 public $timestamps = false;
-   
+
 }
