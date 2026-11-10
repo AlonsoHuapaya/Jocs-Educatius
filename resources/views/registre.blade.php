@@ -314,7 +314,9 @@
                 @csrf
 
                 <div class="form-group">
-                    <label for="name">Nom complet</label>
+                    <label for="name">
+                        Nom complet
+                    </label>
 
                     <input
                         type="text"
