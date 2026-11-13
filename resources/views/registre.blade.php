@@ -297,7 +297,7 @@
             <h2>Crear un compte</h2>
 
             <p class="subtitle">
-                Registra't per accedir a documents,
+                Registra't per accedir a jocs,
                 cronologies i material històric.
             </p>
 
