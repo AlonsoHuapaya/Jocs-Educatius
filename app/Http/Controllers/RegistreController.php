@@ -15,16 +15,15 @@ class RegistreController extends Controller
 
     public function store(Request $request)
     {
-        // Validar los datos del formulario
      
-        // Crear un nuevo usuario
         $usuari = new Usuari();
         $usuari->nom = $request->input('name');
         $usuari->correu = $request->input('email');
         $usuari->contrasenya = bcrypt($request->input('password'));
+        $usuari->progresJoc = 1;
+
         $usuari->save();
 
-        // Redirigir a la página de inicio de sesión con un mensaje de éxito
         return redirect()->route('login')->with('success', 'Registro exitoso. Ahora puedes iniciar sesión.');
     }
 

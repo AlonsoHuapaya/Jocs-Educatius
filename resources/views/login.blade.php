@@ -270,7 +270,7 @@
             </div>
 
             <h1>
-                Cada document<br>
+                Cada Joc<br>
                 amaga una<br>
                 <span>història.</span>
             </h1>
