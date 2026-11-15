@@ -18,4 +18,22 @@ public $timestamps = false;
     {
         return $this->hasMany(Partida::class, 'id_Usuari');
     }
+
+ public function estatJoc(int $numero): string
+    {
+        $progres = max(1, (int) $this->progresJoc);
+        
+        if ($numero < $progres) {
+            return 'completat';
+        }
+        return $numero === $progres ? 'disponible' : 'bloquejat';
+    }
+
+ public function superarJoc(int $numero): void
+    {
+        if($this->estatJoc($numero) === 'disponible') {
+            $this->progresJoc = $numero + 1;
+            $this->save();
+        }
+    }
 }
