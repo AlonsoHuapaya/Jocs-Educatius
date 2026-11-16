@@ -55,13 +55,6 @@
 
         <div class="mapa-marc">
             <svg class="mapa" viewBox="110 140 720 590" role="group" aria-label="Mapa d'Europa amb els expedients del joc">
-                <defs>
-                    <radialGradient id="vinyeta" cx="50%" cy="50%" r="75%">
-                        <stop offset="60%" stop-color="#171714" stop-opacity="0"/>
-                        <stop offset="100%" stop-color="#0f0f0d" stop-opacity="0.85"/>
-                    </radialGradient>
-                </defs>
-
                 <rect class="mapa-mar" width="1000" height="760"/>
 
                 @include('partials.mapa-europa')
@@ -78,8 +71,6 @@
                               d="M{{ $x1 }},{{ $y1 }} Q{{ ($x1 + $x2) / 2 - 40 }},{{ min($y1, $y2) - 30 }} {{ $x2 }},{{ $y2 }}"/>
                     @endif
                 @endforeach
-
-                <rect x="110" y="140" width="720" height="590" fill="url(#vinyeta)" pointer-events="none"/>
 
                 {{-- Segells sobre cada país --}}
                 @foreach ($jocs as $codi => $joc)
