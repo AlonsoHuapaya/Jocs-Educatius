@@ -1,0 +1,593 @@
+/* =========================================================
+   Pantalla principal (mapa) · Arxiu Històric
+   Mateixa paleta i tipografies que el login i el registre.
+   Les variables es poden reutilitzar als jocs.
+   ========================================================= */
+
+:root {
+    --fons: #171714;
+    --fons-panell: #1d1d19;
+    --fons-targeta: #22221d;
+    --vora: #454438;
+    --vora-suau: #2f2e27;
+    --text: #e8e2d5;
+    --text-suau: #96948b;
+    --or: #b49a68;
+    --or-boto: #a38b5d;
+    --or-clar: #c4ad7e;
+    --verd: #8fa877;
+    --serif: 'Cormorant Garamond', serif;
+    --sans: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--fons);
+    color: var(--text);
+    font-family: var(--sans);
+}
+
+.eyebrow {
+    color: var(--or);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+/* ---------- Capçalera ---------- */
+
+.capcalera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 40px;
+    border-bottom: 1px solid var(--vora);
+    background: var(--fons-panell);
+}
+
+.logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    letter-spacing: 3px;
+}
+
+.logo span {
+    color: var(--or);
+}
+
+.progres {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-suau);
+}
+
+.progres-text {
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.progres-barres {
+    display: flex;
+    gap: 4px;
+}
+
+.progres-barra {
+    width: 34px;
+    height: 6px;
+    background: var(--vora-suau);
+    border: 1px solid var(--vora);
+}
+
+.progres-barra--completat {
+    background: var(--or);
+    border-color: var(--or);
+}
+
+.progres-barra--disponible {
+    background: linear-gradient(90deg, var(--or) 30%, var(--vora-suau) 30%);
+    border-color: var(--or);
+}
+
+.progres strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.usuari {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--or);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-text:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Avisos ---------- */
+
+.avis {
+    margin: 20px 40px 0;
+    padding: 14px 18px;
+    border: 1px solid var(--or);
+    background: rgba(180, 154, 104, 0.1);
+    font-size: 13px;
+}
+
+.avis--error {
+    border-color: #a8665a;
+    background: rgba(168, 102, 90, 0.12);
+}
+
+/* ---------- Distribució ---------- */
+
+.layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    gap: 40px;
+    padding: 32px 40px 40px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* ---------- Mapa ---------- */
+
+.mapa-cap {
+    margin-bottom: 20px;
+}
+
+.mapa-cap h1 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4vw, 54px);
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.mapa-cap h1 span {
+    color: var(--or);
+    font-style: italic;
+}
+
+.mapa-cap p {
+    color: var(--text-suau);
+    font-size: 14px;
+}
+
+.mapa-marc {
+    border: 1px solid var(--vora);
+    outline: 1px solid var(--vora-suau);
+    outline-offset: 6px;
+    margin: 6px;
+}
+
+.mapa {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.mapa-mar {
+    fill: #1a1a17;
+}
+
+.mapa-graticula {
+    fill: none;
+    stroke: #2a2923;
+    stroke-width: 0.6;
+    stroke-dasharray: 2 4;
+}
+
+.mapa-fons {
+    fill: #262620;
+    stroke: #3a382f;
+    stroke-width: 0.6;
+}
+
+/* Països del joc */
+
+.pais-forma {
+    stroke: var(--fons);
+    stroke-width: 1;
+    cursor: pointer;
+    transition: fill 0.3s, filter 0.3s;
+}
+
+.pais--bloquejat {
+    fill: #3a382f;
+}
+
+.pais--disponible {
+    fill: #8a7550;
+}
+
+.pais--completat {
+    fill: #5f5640;
+}
+
+.pais-forma:hover,
+.pais-forma.seleccionat {
+    fill: var(--or-clar);
+}
+
+.pais--bloquejat:hover,
+.pais--bloquejat.seleccionat {
+    fill: #4a473c;
+}
+
+/* Ruta */
+
+.ruta {
+    fill: none;
+    stroke: var(--text-suau);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 6;
+    opacity: 0.5;
+}
+
+.ruta--feta {
+    stroke: var(--or);
+    opacity: 1;
+}
+
+/* Segells */
+
+.segell {
+    cursor: pointer;
+    outline: none;
+}
+
+.segell-cercle {
+    fill: var(--fons);
+    stroke: var(--or);
+    stroke-width: 1.5;
+    transition: transform 0.2s;
+}
+
+.segell-vora {
+    fill: none;
+    stroke: var(--or);
+    stroke-width: 0.6;
+    stroke-dasharray: 2 2;
+}
+
+.segell-num {
+    fill: var(--or);
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    text-anchor: middle;
+}
+
+.segell-icona {
+    fill: none;
+    stroke: var(--or);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.segell-nom {
+    fill: var(--text);
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: var(--fons);
+    stroke-width: 4px;
+}
+
+.segell--bloquejat .segell-cercle,
+.segell--bloquejat .segell-vora {
+    stroke: #6b675a;
+}
+
+.segell--bloquejat .segell-icona {
+    stroke: #8a8677;
+}
+
+.segell--bloquejat .segell-nom {
+    fill: var(--text-suau);
+}
+
+.segell--completat .segell-cercle {
+    fill: var(--or);
+}
+
+.segell--completat .segell-icona {
+    stroke: var(--fons);
+    stroke-width: 2.5;
+}
+
+.segell:hover .segell-cercle,
+.segell:focus-visible .segell-cercle,
+.segell.seleccionat .segell-cercle {
+    transform: scale(1.12);
+}
+
+.segell:focus-visible .segell-vora {
+    stroke: var(--text);
+    stroke-dasharray: none;
+    stroke-width: 1.5;
+}
+
+.segell-pols {
+    fill: none;
+    stroke: var(--or);
+    stroke-width: 1.5;
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: pols 2.2s ease-out infinite;
+}
+
+@keyframes pols {
+    from { transform: scale(0.8); opacity: 0.9; }
+    to { transform: scale(1.6); opacity: 0; }
+}
+
+/* ---------- Panell d'expedients ---------- */
+
+.expedients {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.continua {
+    padding: 24px;
+    border: 1px solid var(--or);
+    background: var(--fons-panell);
+}
+
+.continua h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 18px;
+}
+
+.continua p {
+    color: var(--text-suau);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.llista-expedients {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.expedient {
+    padding: 20px 22px;
+    background: var(--fons-targeta);
+    border: 1px solid var(--vora-suau);
+    border-left: 3px solid var(--or);
+    transition: border-color 0.3s, background 0.3s;
+}
+
+.expedient.seleccionat {
+    border-color: var(--or);
+    background: #29281f;
+}
+
+.expedient--bloquejat {
+    border-left-color: #55524a;
+}
+
+.expedient--bloquejat h3,
+.expedient--bloquejat .expedient-titol,
+.expedient--bloquejat .nivells {
+    opacity: 0.55;
+}
+
+.expedient-cap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.expedient-num {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--or);
+}
+
+.etiqueta {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border: 1px solid currentColor;
+}
+
+.etiqueta--completat { color: var(--verd); }
+.etiqueta--disponible { color: var(--or); }
+.etiqueta--bloquejat { color: var(--text-suau); }
+
+.expedient h3 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.expedient h3 small {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-suau);
+    margin-left: 8px;
+}
+
+.expedient-titol {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--or-clar);
+    margin: 2px 0 8px;
+}
+
+.expedient-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-suau);
+    margin-bottom: 14px;
+}
+
+.nivells {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+    font-size: 13px;
+}
+
+.nivells li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nivells span {
+    display: inline-grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--vora);
+    font-size: 10px;
+    color: var(--or);
+}
+
+/* ---------- Botons (mateix estil que .btn-login) ---------- */
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--or-boto);
+    color: var(--fons);
+    border: 1px solid var(--or-boto);
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--or-clar);
+    transform: translateY(-2px);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 3px;
+}
+
+.btn--secundari {
+    background: transparent;
+    color: var(--or);
+}
+
+.btn--secundari:hover {
+    background: rgba(180, 154, 104, 0.12);
+}
+
+.btn--bloquejat,
+.btn--bloquejat:hover {
+    background: transparent;
+    border-color: var(--vora);
+    color: var(--text-suau);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ---------- Vista provisional dels jocs ---------- */
+
+.pagina-centrada {
+    display: grid;
+    place-items: center;
+    padding: 30px;
+}
+
+.joc-provisional {
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.joc-provisional h2 {
+    margin-bottom: 0;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1100px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .capcalera {
+        flex-wrap: wrap;
+        padding: 16px 20px;
+    }
+
+    .progres-text {
+        display: none;
+    }
+
+    .layout {
+        padding: 24px 20px;
+    }
+
+    .avis {
+        margin: 16px 20px 0;
+    }
+
+    /* El mapa es fa petit: noms dels països més grans */
+    .segell-nom {
+        font-size: 28px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .segell-pols {
+        animation: none;
+    }
+
+    .btn:hover {
+        transform: none;
+    }
+}
