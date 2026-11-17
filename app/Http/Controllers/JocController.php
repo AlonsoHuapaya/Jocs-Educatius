@@ -2,65 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Joc;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class JocController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Obre el joc d'un país, si l'usuari l'ha desbloquejat.
+     * Cada membre pot crear la seva vista a resources/views/jocs/{codi}.blade.php.
      */
-    public function index()
+    public function show(string $codi): View|RedirectResponse
     {
-        //
+        $joc = config("jocs.$codi");
+        abort_if($joc === null, 404);
+
+        if (Auth::user()->estatJoc($joc['numero']) === 'bloquejat') {
+            return redirect()->route('inici')
+                ->with('error', "Encara no has desbloquejat l'expedient de {$joc['nom']}.");
+        }
+
+        $vista = view()->exists("jocs.$codi") ? "jocs.$codi" : 'jocs.en-construccio';
+
+        return view($vista, ['codi' => $codi, 'joc' => $joc]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * El joc l'envia en acabar-lo: desbloqueja el següent i torna al mapa.
      */
-    public function create()
+    public function superat(string $codi): RedirectResponse
     {
-        //
-    }
+        $joc = config("jocs.$codi");
+        abort_if($joc === null, 404);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        Auth::user()->superarJoc($joc['numero']);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Joc $joc)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Joc $joc)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Joc $joc)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Joc $joc)
-    {
-        //
+        return redirect()->route('inici')
+            ->with('success', "Expedient de {$joc['nom']} resolt!");
     }
 }
