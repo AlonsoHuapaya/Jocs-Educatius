@@ -1,4 +1,6 @@
+@extends('plantillas.main')
 
+<!-- 
 <!DOCTYPE html>
 <html lang="ca">
 
@@ -255,7 +257,7 @@
 
 <div class="container">
 
-    <!-- Panell històric -->
+    /* Panell històric */
 
     <section class="history-panel">
 
@@ -305,7 +307,7 @@
 
     </section>
 
-    <!-- Formulari de login -->
+    /* Formulari de login */
 
     <section class="login-panel">
 
@@ -322,7 +324,7 @@
                 el nostre arxiu històric.
             </p>
 
-            <!-- Errors de validació -->
+            /* Errors de validació */
 
             @if ($errors->any())
                 <div style="color: #d99b8d; margin-bottom: 20px;">
@@ -332,7 +334,7 @@
                 </div>
             @endif
 
-            <!-- Missatge de sessió -->
+            /* Missatge de sessió */
 
             @if (session('status'))
                 <div style="color: #b49a68; margin-bottom: 20px;">
@@ -431,3 +433,4 @@
 
 </body>
 </html>
+-->
