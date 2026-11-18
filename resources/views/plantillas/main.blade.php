@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,11 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-yEPZ7jP9S0QKiUQ0m3jjsO4ProIW7wvR9gXkI7JOGa2XVsw53Yke2bsdkBbjmmiX" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/js/bootstrap.bundle.min.js" integrity="sha384-WyOxWvTyr1QaMPfiPJSv76iReVthorl5uWlFtZPyK0IEB0hGzo9y5Bp9mYanr8Bu" crossorigin="anonymous"></script>
 
-        <title>@yield('titulo')</title>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+
+        <title>@yield('title')</title>
     </head>
     <body>
         <div class="container">
@@ -25,16 +29,11 @@
                     </div>
 
                     <h1>
-                        El passat<br>
-                        mai no deixa<br>
-                        de <span>parlar.</span>
+                        @yield('history-title')
                     </h1>
 
                     <p>
-                        Explora els esdeveniments que van marcar el segle XX.
-                        Analitza els règims totalitaris, els seus protagonistes,
-                        les seves conseqüències i les lliçons que van deixar
-                        per a les generacions futures.
+                        @yield('history-text')
                     </p>
 
                 </div>
@@ -59,11 +58,9 @@
                 </div>
 
             </section>
-        </div>
 
+            @yield('content')
 
-        <div class="container">
-            @yield('contenido')
         </div>
 
     </body>

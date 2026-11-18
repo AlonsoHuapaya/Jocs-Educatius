@@ -1,7 +1,10 @@
 /* =========================================================
-   Pantalla principal (mapa) · Arxiu Històric
-   Mateixa paleta i tipografies que el login i el registre.
-   Les variables es poden reutilitzar als jocs.
+   Arxiu Històric · Full d'estils únic
+   1. Base comuna (variables, reset, tipografia i botons)
+   2. Login i registre
+   3. Pantalla principal (mapa)
+   4. Vista provisional dels jocs
+   5. Responsive de la pantalla principal
    ========================================================= */
 
 :root {
@@ -19,6 +22,10 @@
     --serif: 'Cormorant Garamond', serif;
     --sans: 'Inter', sans-serif;
 }
+
+/* =========================================================
+   1. BASE COMUNA
+   ========================================================= */
 
 * {
     margin: 0;
@@ -41,6 +48,299 @@ body {
     margin-bottom: 12px;
 }
 
+.logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.logo span {
+    color: var(--or);
+}
+
+/* ---------- Botons ---------- */
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: var(--or-boto);
+    color: var(--fons);
+    border: 1px solid var(--or-boto);
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: var(--or-clar);
+    transform: translateY(-2px);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 3px;
+}
+
+.btn--secundari {
+    background: transparent;
+    color: var(--or);
+}
+
+.btn--secundari:hover {
+    background: rgba(180, 154, 104, 0.12);
+}
+
+.btn--bloquejat,
+.btn--bloquejat:hover {
+    background: transparent;
+    border-color: var(--vora);
+    color: var(--text-suau);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =========================================================
+   2. LOGIN I REGISTRE (plantillas/main.blade.php)
+   ========================================================= */
+
+.container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* ---------- Panell històric ---------- */
+
+.history-panel {
+    width: 55%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    background:
+        linear-gradient(
+            rgba(15, 15, 13, 0.65),
+            rgba(15, 15, 13, 0.9)
+        ),
+        url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?q=80&w=1200')
+        center/cover;
+
+    border-right: 1px solid #494537;
+}
+
+.history-panel .logo {
+    font-size: 24px;
+}
+
+.history-content {
+    max-width: 580px;
+}
+
+.history-content .eyebrow {
+    margin-bottom: 25px;
+}
+
+.history-content h1 {
+    font-family: var(--serif);
+    font-size: clamp(45px, 5vw, 76px);
+    line-height: 0.95;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.history-content h1 span {
+    color: var(--or);
+    font-style: italic;
+}
+
+.history-content p {
+    color: #bdb9ae;
+    line-height: 1.8;
+    font-size: 14px;
+    max-width: 440px;
+}
+
+.timeline {
+    display: flex;
+    gap: 30px;
+    border-top: 1px solid #5b5545;
+    padding-top: 25px;
+}
+
+.timeline-item small {
+    display: block;
+    color: var(--or);
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.timeline-item span {
+    font-family: var(--serif);
+    font-size: 17px;
+}
+
+/* ---------- Panell del formulari ---------- */
+
+.login-panel,
+.register-panel {
+    width: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 30px;
+    background: var(--fons-panell);
+}
+
+.login-box,
+.register-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-box h2,
+.register-box h2 {
+    font-family: var(--serif);
+    font-size: 42px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: var(--text-suau);
+    margin-bottom: 35px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: #c8c1b2;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    background: #262620;
+    border: 1px solid var(--vora);
+    color: #eee8da;
+    outline: none;
+    font-family: var(--sans);
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    border-color: var(--or);
+    background: #2b2b24;
+}
+
+.form-group input::placeholder {
+    color: #77766d;
+}
+
+.form-group .checkbox-remember {
+    width: auto;
+    margin-right: 8px;
+}
+
+/* Només al login */
+.forgot-password {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.forgot-password a {
+    color: var(--or);
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+/* Missatges (errors de validació i estat de sessió) */
+.missatge-error {
+    color: #d99b8d;
+    margin-bottom: 20px;
+}
+
+.missatge-estat {
+    color: var(--or);
+    margin-bottom: 20px;
+}
+
+/* Els botons fan servir .btn; aquí només canvia la separació */
+.btn-login {
+    margin-top: 25px;
+}
+
+.btn-register {
+    margin-top: 10px;
+}
+
+/* ---------- Enllaç a l'altra pàgina i peu ---------- */
+
+.login-link,
+.register-link {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-suau);
+}
+
+.login-link a,
+.register-link a {
+    color: var(--or);
+    text-decoration: none;
+}
+
+.login-link a:hover,
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+.footer {
+    margin-top: 35px;
+    text-align: center;
+    color: #66655c;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+/* ---------- Mòbil ---------- */
+
+@media (max-width: 900px) {
+    .history-panel {
+        display: none;
+    }
+
+    .login-panel,
+    .register-panel {
+        width: 100%;
+        min-height: 100vh;
+    }
+}
+
+/* =========================================================
+   3. PANTALLA PRINCIPAL (inici.blade.php)
+   ========================================================= */
+
 /* ---------- Capçalera ---------- */
 
 .capcalera {
@@ -51,16 +351,6 @@ body {
     padding: 18px 40px;
     border-bottom: 1px solid var(--vora);
     background: var(--fons-panell);
-}
-
-.logo {
-    font-family: var(--serif);
-    font-size: 22px;
-    letter-spacing: 3px;
-}
-
-.logo span {
-    color: var(--or);
 }
 
 .progres {
@@ -504,55 +794,10 @@ body {
     color: var(--or);
 }
 
-/* ---------- Botons (mateix estil que .btn-login) ---------- */
 
-.btn {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    background: var(--or-boto);
-    color: var(--fons);
-    border: 1px solid var(--or-boto);
-    text-align: center;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-family: var(--sans);
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: var(--or-clar);
-    transform: translateY(-2px);
-}
-
-.btn:focus-visible {
-    outline: 2px solid var(--text);
-    outline-offset: 3px;
-}
-
-.btn--secundari {
-    background: transparent;
-    color: var(--or);
-}
-
-.btn--secundari:hover {
-    background: rgba(180, 154, 104, 0.12);
-}
-
-.btn--bloquejat,
-.btn--bloquejat:hover {
-    background: transparent;
-    border-color: var(--vora);
-    color: var(--text-suau);
-    cursor: not-allowed;
-    transform: none;
-}
-
-/* ---------- Vista provisional dels jocs ---------- */
+/* =========================================================
+   4. VISTA PROVISIONAL DELS JOCS (jocs/en-construccio.blade.php)
+   ========================================================= */
 
 .pagina-centrada {
     display: grid;
@@ -571,10 +816,14 @@ body {
     margin-bottom: 0;
 }
 
+/* =========================================================
+   5. RESPONSIVE DE LA PANTALLA PRINCIPAL
+   ========================================================= */
+
 /* ---------- Ordenador: todo cabe en una pantalla, sin scroll ---------- */
 
 @media (min-width: 1101px) {
-    body {
+    .pagina-mapa {
         height: 100vh;
         display: flex;
         flex-direction: column;
@@ -690,7 +939,8 @@ body {
         font-size: 9px;
     }
 
-    .btn {
+    .pagina-mapa .btn,
+    .pagina-centrada .btn {
         padding: 11px;
     }
 }
@@ -739,6 +989,8 @@ body {
         font-size: 22px;
     }
 }
+
+/* ---------- Accessibilitat (tot el lloc) ---------- */
 
 @media (prefers-reduced-motion: reduce) {
     .segell-pols {
