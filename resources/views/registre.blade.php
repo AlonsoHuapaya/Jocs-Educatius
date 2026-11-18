@@ -4,8 +4,119 @@
     Registre | Arxiu Històric
 @endsection
 
+@section('history-title')
+    El passat<br>
+    mai no deixa<br>
+    de <span>parlar.</span>
+@endsection
+
+@section('history-text')
+    Explora els esdeveniments que van marcar el segle XX.
+    Analitza els règims totalitaris, els seus protagonistes,
+    les seves conseqüències i les lliçons que van deixar
+    per a les generacions futures.
+@endsection
+
 @section('content')
-    
+    <section class="register-panel">
+
+        <div class="register-box">
+
+            <div class="eyebrow">
+                Accés a l'arxiu
+            </div>
+
+            <h2>Crear un compte</h2>
+
+            <p class="subtitle">
+                Registra't per accedir a jocs,
+                cronologies i material històric.
+            </p>
+
+            @if ($errors->any())
+                <div class="missatge-error">
+                    @foreach ($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
+            <form action="{{ route('registre.store') }}" method="POST">
+
+                @csrf
+
+                <div class="form-group">
+                    <label for="name">Nom complet</label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ old('name') }}"
+                        placeholder="El teu nom"
+                        required
+                        autocomplete="name"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correu electrònic</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        placeholder="nom@exemple.cat"
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contrasenya</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="••••••••••"
+                        required
+                        autocomplete="new-password"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password_confirmation">Confirmació de la contrasenya</label>
+
+                    <input
+                        type="password"
+                        id="password_confirmation"
+                        name="password_confirmation"
+                        placeholder="Repeteix la contrasenya"
+                        required
+                        autocomplete="new-password"
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-register">
+                    Crear compte →
+                </button>
+
+            </form>
+
+            <div class="login-link">
+                Ja tens un compte?
+                <a href="{{ route('login') }}">Inicia sessió</a>
+            </div>
+
+            <div class="footer">
+                ARXIU HISTÒRIC · ESTUDI DEL PASSAT
+            </div>
+
+        </div>
+
+    </section>
 @endsection
 
 

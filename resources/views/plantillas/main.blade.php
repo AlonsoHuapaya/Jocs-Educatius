@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
 
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-        @vite('resources/css/styles.css')
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
         <title>@yield('title')</title>
     </head>
@@ -29,16 +29,11 @@
                     </div>
 
                     <h1>
-                        El passat<br>
-                        mai no deixa<br>
-                        de <span>parlar.</span>
+                        @yield('history-title')
                     </h1>
 
                     <p>
-                        Explora els esdeveniments que van marcar el segle XX.
-                        Analitza els règims totalitaris, els seus protagonistes,
-                        les seves conseqüències i les lliçons que van deixar
-                        per a les generacions futures.
+                        @yield('history-text')
                     </p>
 
                 </div>
@@ -63,11 +58,9 @@
                 </div>
 
             </section>
-        </div>
 
-
-        <div class="container">
             @yield('content')
+
         </div>
 
     </body>

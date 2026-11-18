@@ -4,8 +4,120 @@
     Iniciar sessió | Arxiu Històric
 @endsection
 
+@section('history-title')
+    Cada Joc<br>
+    amaga una<br>
+    <span>història.</span>
+@endsection
+
+@section('history-text')
+    Torna a explorar els moments que van transformar
+    el segle XX. Descobreix documents, personatges
+    i esdeveniments que van marcar la història
+    contemporània.
+@endsection
+
 @section('content')
-    
+    <section class="login-panel">
+
+        <div class="login-box">
+
+            <div class="eyebrow">
+                Accés a l'arxiu
+            </div>
+
+            <h2>Benvingut de nou</h2>
+
+            <p class="subtitle">
+                Inicia sessió per continuar explorant
+                el nostre arxiu històric.
+            </p>
+
+            {{-- Errors de validació --}}
+            @if ($errors->any())
+                <div class="missatge-error">
+                    @foreach ($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
+            {{-- Missatge de sessió --}}
+            @if (session('status'))
+                <div class="missatge-estat">
+                    {{ session('status') }}
+                </div>
+            @endif
+
+            <form action="{{ route('login.dades') }}" method="POST">
+
+                @csrf
+
+                <div class="form-group">
+                    <label for="email">Correu electrònic</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        placeholder="nom@exemple.cat"
+                        required
+                        autofocus
+                        autocomplete="username"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contrasenya</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="••••••••••"
+                        required
+                        autocomplete="current-password"
+                    >
+
+                    @if (Route::has('password.request'))
+                        <div class="forgot-password">
+                            <a href="{{ route('password.request') }}">
+                                Has oblidat la contrasenya?
+                            </a>
+                        </div>
+                    @endif
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="remember"
+                            class="checkbox-remember"
+                        >
+                        Recorda'm
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-login">
+                    Iniciar sessió →
+                </button>
+
+            </form>
+
+            <div class="register-link">
+                Encara no tens un compte?
+                <a href="{{ route('vista_registre') }}">Registra't</a>
+            </div>
+
+            <div class="footer">
+                ARXIU HISTÒRIC · ESTUDI DEL PASSAT
+            </div>
+
+        </div>
+
+    </section>
 @endsection
 
 {{-- 

@@ -9,10 +9,10 @@
     <title>El teu recorregut | Arxiu Històric</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/inici.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 </head>
 
-<body>
+<body class="pagina-mapa">
 
 {{-- ===================== CAPÇALERA ===================== --}}
 <header class="capcalera">
