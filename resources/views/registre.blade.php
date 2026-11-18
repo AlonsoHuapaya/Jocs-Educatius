@@ -1,4 +1,15 @@
+@extends('plantillas.main')
 
+@section('title')
+    Registre | Arxiu Històric
+@endsection
+
+@section('content')
+    
+@endsection
+
+
+<!-- 
 <!DOCTYPE html>
 <html lang="ca">
 
@@ -394,3 +405,4 @@
 
 </body>
 </html>
+-->

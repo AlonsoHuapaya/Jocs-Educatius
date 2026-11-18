@@ -1,5 +1,13 @@
 @extends('plantillas.main')
 
+@section('title')
+    Iniciar sessió | Arxiu Històric
+@endsection
+
+@section('content')
+    
+@endsection
+
 <!-- 
 <!DOCTYPE html>
 <html lang="ca">
