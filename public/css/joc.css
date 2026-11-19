@@ -1,0 +1,775 @@
+/* =========================================================
+   Arxiu Històric · Carcassa comuna dels jocs
+   (plantillas/joc.blade.php)
+
+   Fa servir les variables de styles.css (--fons, --text, --or…)
+   i n'afegeix les pròpies dels jocs. Cada joc només canvia les
+   variables del seu bloc (.joc-italia, .joc-espanya, .joc-alemanya).
+
+   1. Variables dels jocs
+   2. Capçalera i franja de bandera
+   3. Zona del repte
+   4. Botonera
+   5. Panell lateral
+   6. Peces reutilitzables (fitxes i caselles de drag and drop)
+   7. Modal
+   8. Estats
+   9. Responsive
+   ========================================================= */
+
+/* =========================================================
+   1. VARIABLES DELS JOCS
+   ========================================================= */
+
+.pagina-joc {
+    --fons-zona: #1f1e1a;
+    --paper: #e9e3d3;
+    --paper-text: #1a1a17;
+    --paper-etiqueta: #5e5a50;
+    --vermell: #c27a66;
+    --temps: #d9826e;
+    --gris-linia: #6b675c;
+
+    /* Valors per defecte (se sobreescriuen a cada joc) */
+    --accent: var(--or);
+    --primari-fons: var(--or-boto);
+    --primari-text: var(--fons);
+    --font-joc: var(--serif);
+    --font-document: var(--font-joc);
+    --bandera-1: var(--vora);
+    --bandera-2: var(--vora);
+    --bandera-3: var(--vora);
+}
+
+.joc-italia {
+    --accent: #4cb572;
+    --primari-fons: #007a3d;
+    --primari-text: #ffffff;
+    --font-joc: 'Bodoni Moda', serif;
+    --bandera-1: #009246;
+    --bandera-2: #f1f2f1;
+    --bandera-3: #ce2b37;
+}
+
+.joc-espanya {
+    --accent: #f1bf00;
+    --primari-fons: #f1bf00;
+    --primari-text: #1a1a17;
+    --font-joc: 'Oswald', sans-serif;
+    --font-document: 'Special Elite', monospace;
+    --bandera-1: #aa151b;
+    --bandera-2: #f1bf00;
+    --bandera-3: #aa151b;
+}
+
+.joc-alemanya {
+    --accent: #ff6b5e;
+    --primari-fons: #dd0000;
+    --primari-text: #ffffff;
+    --font-joc: 'Jost', sans-serif;
+    --bandera-1: #000000;
+    --bandera-2: #ffffff;
+    --bandera-3: #dd0000;
+}
+
+.pagina-joc {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Etiquetes en majúscules (sobreescriu el .eyebrow de styles.css) */
+.pagina-joc .eyebrow {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+}
+
+.eyebrow--joc {
+    color: var(--accent);
+}
+
+.eyebrow--or {
+    color: var(--or);
+}
+
+/* =========================================================
+   2. CAPÇALERA I FRANJA DE BANDERA
+   ========================================================= */
+
+.joc-capcalera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px 28px;
+    padding: 12px 40px;
+}
+
+.joc-capcalera .logo {
+    color: var(--text);
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+}
+
+.joc-expedient {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+}
+
+.joc-pais {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.joc-pais-nom {
+    font-family: var(--font-joc);
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.joc-pais-num {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--text-suau);
+}
+
+/* Bandera de 3 franges (sense escuts) */
+.bandera {
+    display: inline-flex;
+    width: 27px;
+    height: 18px;
+}
+
+.bandera i,
+.franja-bandera i {
+    flex: 1;
+}
+
+.bandera i:nth-child(1),
+.franja-bandera i:nth-child(1) {
+    background: var(--bandera-1);
+}
+
+.bandera i:nth-child(2),
+.franja-bandera i:nth-child(2) {
+    background: var(--bandera-2);
+}
+
+.bandera i:nth-child(3),
+.franja-bandera i:nth-child(3) {
+    background: var(--bandera-3);
+}
+
+.franja-bandera {
+    display: flex;
+    height: 4px;
+}
+
+.separador {
+    width: 1px;
+    height: 28px;
+    background: var(--vora);
+}
+
+/* Indicador de nivells */
+.indicador-nivells {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.indicador-nivell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.indicador-quadre {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--vora);
+    color: var(--text-suau);
+    font-family: var(--font-joc);
+    font-size: 15px;
+}
+
+/* Només es veu el nom del nivell actual */
+.indicador-nom {
+    display: none;
+}
+
+.indicador-nivell[data-estat="actual"] .indicador-quadre {
+    border-color: var(--accent);
+    color: var(--text);
+}
+
+.indicador-nivell[data-estat="actual"] .indicador-nom {
+    display: inline;
+}
+
+.indicador-nivell[data-estat="resolt"] .indicador-quadre {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--fons);
+    font-size: 0;
+}
+
+.indicador-nivell[data-estat="resolt"] .indicador-quadre::after {
+    content: "✓";
+    font-family: var(--sans);
+    font-size: 14px;
+}
+
+.indicador-linia {
+    width: 24px;
+    height: 1px;
+    background: var(--gris-linia);
+}
+
+/* Marcadors: temps, intents i punts */
+.joc-marcadors {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.marcadors {
+    display: flex;
+    gap: 24px;
+    text-align: center;
+}
+
+.marcadors dt {
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    color: var(--text-suau);
+}
+
+.marcador-numero {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-variant-numeric: lining-nums tabular-nums;
+    line-height: 1.1;
+}
+
+.marcador-punts {
+    color: var(--or);
+}
+
+/* En el nivell 3 el temps és un compte enrere */
+.marcador-numero.compte-enrere {
+    color: var(--temps);
+}
+
+.boto-icona {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gris-linia);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.boto-icona:hover {
+    border-color: var(--or);
+}
+
+/* =========================================================
+   3. ZONA DEL REPTE
+   ========================================================= */
+
+.joc-cos {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+}
+
+.joc-principal {
+    flex: 999 1 680px;
+    min-width: 0;
+    padding: 28px 40px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.repte-cap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 14px;
+}
+
+.repte-cap .eyebrow {
+    margin-bottom: 8px;
+}
+
+.repte-titol {
+    font-family: var(--font-joc);
+    font-size: 36px;
+    font-weight: 500;
+    line-height: 1.12;
+}
+
+.repte-instruccio {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--text-suau);
+}
+
+.progres-nivell {
+    width: 240px;
+    max-width: 100%;
+}
+
+.progres-nivell-text {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    color: var(--text-suau);
+}
+
+.progres-nivell-barra {
+    height: 3px;
+    background: var(--vora);
+}
+
+.progres-nivell-ple {
+    width: 0;
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.3s;
+}
+
+/* Requadre on cada membre posa la seva mecànica */
+.zona-joc {
+    flex: 1;
+    min-height: 360px;
+    padding: 22px 28px 26px;
+    border: 1px solid var(--vora);
+    background: var(--fons-zona);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* =========================================================
+   4. BOTONERA
+   ========================================================= */
+
+.botonera {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.btn-joc {
+    min-height: 50px;
+    padding: 0 26px;
+    border: 1px solid transparent;
+    background: transparent;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+}
+
+.btn-joc:focus-visible,
+.boto-icona:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 3px;
+}
+
+.btn-joc:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.btn-joc--fantasma {
+    border-color: var(--vora);
+    color: var(--text-suau);
+}
+
+.btn-joc--fantasma:hover:not(:disabled) {
+    color: var(--text);
+}
+
+.btn-joc--secundari {
+    border-color: var(--or);
+    color: var(--or);
+}
+
+.btn-joc--secundari:hover:not(:disabled) {
+    background: rgba(180, 154, 104, 0.12);
+}
+
+.btn-joc--principal {
+    padding: 0 44px;
+    background: var(--primari-fons);
+    color: var(--primari-text);
+    letter-spacing: 0.22em;
+}
+
+.btn-joc--principal:hover:not(:disabled) {
+    filter: brightness(1.1);
+}
+
+/* El botó Comprova va a la dreta de la botonera */
+.botonera .btn-joc--principal {
+    margin-left: auto;
+}
+
+/* Botó amb ratlla inferior vermella del joc d'Espanya */
+.joc-espanya .btn-joc--principal {
+    box-shadow: inset 0 -3px 0 #aa151b;
+}
+
+/* =========================================================
+   5. PANELL LATERAL
+   ========================================================= */
+
+.joc-panell {
+    flex: 1 1 320px;
+    min-width: 0;
+    padding: 26px 32px;
+    border-left: 1px solid var(--vora);
+    background: var(--fons-panell);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.panell-bloc {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* La Núria */
+.nuria {
+    display: flex;
+    align-items: flex-start;
+}
+
+.nuria-avatar {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--or);
+    background: #2e2c25;
+}
+
+.nuria-bafarada {
+    flex: 1;
+    margin-left: 12px;
+    padding: 12px 14px;
+    border: 1px solid var(--vora);
+    background: #2a2822;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Quan la Núria dona una pista, la bafarada es marca amb el color or */
+.nuria-bafarada.pista {
+    border-color: var(--or);
+}
+
+.pistes-disponibles {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border: 1px solid var(--vora);
+    font-size: 13px;
+    color: var(--text-suau);
+}
+
+.pistes-valor {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: var(--serif);
+    font-size: 20px;
+    font-variant-numeric: lining-nums;
+    color: var(--text);
+}
+
+.pistes-valor small {
+    white-space: nowrap;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--text-suau);
+}
+
+/* Documents trobats */
+.documents {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.document {
+    aspect-ratio: 3 / 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    text-align: center;
+    font-family: var(--font-joc);
+    font-size: 12px;
+    background: var(--paper);
+    color: var(--paper-etiqueta);
+}
+
+.document--buit {
+    border: 1px solid var(--vora);
+    background: #23221d;
+    color: #57544a;
+    font-size: 18px;
+}
+
+/* Estadístiques */
+.estadistiques {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.estadistiques div {
+    padding: 8px 10px;
+    border: 1px solid var(--vora);
+}
+
+.estadistiques dt {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text-suau);
+}
+
+.estadistiques dd {
+    margin-top: 2px;
+    font-family: var(--serif);
+    font-size: 22px;
+    font-variant-numeric: lining-nums;
+}
+
+/* =========================================================
+   6. PECES REUTILITZABLES
+   ========================================================= */
+
+/* Fitxa arrossegable (fons paper) */
+.fitxa {
+    width: 214px;
+    padding: 12px 14px;
+    border: 0;
+    background: var(--paper);
+    color: var(--paper-text);
+    text-align: left;
+    cursor: grab;
+}
+
+.fitxa-etiqueta {
+    display: block;
+    margin-bottom: 4px;
+    font-family: var(--sans);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    color: var(--paper-etiqueta);
+}
+
+.fitxa-titol {
+    display: block;
+    font-family: var(--font-joc);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.25;
+}
+
+/* Mentre s'arrossega */
+.fitxa.arrossegant {
+    transform: rotate(-2deg) translateY(-6px);
+    box-shadow: 0 0 0 2px var(--accent), 0 16px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Casella on es pot deixar una fitxa */
+.casella {
+    min-height: 112px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #4a483f;
+    font-family: var(--font-joc);
+    font-size: 22px;
+    color: var(--gris-linia);
+}
+
+/* L'element arrossegat és a sobre de la casella */
+.casella.drag-over {
+    border-color: var(--accent);
+    background: #1f2b22;
+    color: var(--text);
+}
+
+.casella--correcta {
+    border: 1px solid var(--verd);
+    background: #252b22;
+}
+
+.casella--incorrecta {
+    border: 1px solid var(--vermell);
+}
+
+/* =========================================================
+   7. MODAL
+   ========================================================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(10, 10, 8, 0.78);
+}
+
+.modal-caixa {
+    width: 520px;
+    max-width: 100%;
+    padding: 32px 36px;
+    border: 1px solid var(--vora);
+    border-top: 4px solid var(--accent);
+    background: var(--fons-panell);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.modal-titol {
+    font-family: var(--font-joc);
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.15;
+}
+
+.modal-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-suau);
+}
+
+.modal-botons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* Resum de punts dins del modal de nivell superat */
+.modal-resum {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    text-align: center;
+}
+
+.modal-resum div {
+    padding: 8px;
+    border: 1px solid var(--vora);
+}
+
+.modal-resum dt {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--text-suau);
+}
+
+.modal-resum dd {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-variant-numeric: lining-nums;
+}
+
+/* =========================================================
+   8. ESTATS
+   ========================================================= */
+
+.ocult {
+    display: none;
+}
+
+/* Evita que es mogui la pàgina de fons amb el modal obert */
+.pagina-joc.amb-modal {
+    overflow: hidden;
+}
+
+/* =========================================================
+   9. RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .joc-capcalera,
+    .joc-principal {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .joc-panell {
+        border-left: 0;
+        border-top: 1px solid var(--vora);
+        padding: 22px 20px;
+    }
+
+    .repte-titol {
+        font-size: 28px;
+    }
+
+    .separador {
+        display: none;
+    }
+
+    .zona-joc {
+        padding: 16px;
+    }
+
+    .botonera .btn-joc--principal {
+        margin-left: 0;
+        flex: 1 1 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .progres-nivell-ple {
+        transition: none;
+    }
+}
