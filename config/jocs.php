@@ -16,8 +16,21 @@ return [
         'marcador' => [600, 470],
     ],
 
-    'espanya' => [
+    'alemanya' => [
         'numero' => 2,
+        'nom' => 'Alemanya',
+        'periode' => '1919 – 1945',
+        'titol' => 'De Weimar al nazisme',
+        'descripcio' => 'Com una democràcia en crisi va acabar en un estat totalitari i en guerra.',
+        'nivells' => [
+            1 => 'La República de Weimar',
+            2 => "L'ascens del nazisme",
+            3 => 'La Segona Guerra Mundial',
+        ],
+        'marcador' => [583, 271],
+    ],
+    'espanya' => [
+        'numero' => 3,
         'nom' => 'Espanya',
         'periode' => '1931 – 1975',
         'titol' => 'De la República al franquisme',
@@ -30,18 +43,5 @@ return [
         'marcador' => [300, 575],
     ],
 
-    'alemanya' => [
-        'numero' => 3,
-        'nom' => 'Alemanya',
-        'periode' => '1919 – 1945',
-        'titol' => 'De Weimar al nazisme',
-        'descripcio' => 'Com una democràcia en crisi va acabar en un estat totalitari i en guerra.',
-        'nivells' => [
-            1 => 'La República de Weimar',
-            2 => "L'ascens del nazisme",
-            3 => 'La Segona Guerra Mundial',
-        ],
-        'marcador' => [583, 271],
-    ],
 
 ];
