@@ -16,22 +16,9 @@ return [
         'marcador' => [600, 470],
     ],
 
-    'espanya' => [
-        'numero' => 2,
-        'nom' => 'Espanya',
-        'periode' => '1931 – 1975',
-        'titol' => 'De la República al franquisme',
-        'descripcio' => 'Les esperances de la Segona República, la Guerra Civil i quaranta anys de dictadura.',
-        'nivells' => [
-            1 => 'La Segona República',
-            2 => 'La Guerra Civil',
-            3 => 'El franquisme',
-        ],
-        'marcador' => [300, 575],
-    ],
 
     'alemanya' => [
-        'numero' => 3,
+        'numero' => 2,
         'nom' => 'Alemanya',
         'periode' => '1919 – 1945',
         'titol' => 'De Weimar al nazisme',
@@ -44,4 +31,17 @@ return [
         'marcador' => [583, 271],
     ],
 
+    'espanya' => [
+        'numero' => 3,
+        'nom' => 'Espanya',
+        'periode' => '1931 – 1975',
+        'titol' => 'De la República al franquisme',
+        'descripcio' => 'Les esperances de la Segona República, la Guerra Civil i quaranta anys de dictadura.',
+        'nivells' => [
+            1 => 'La Segona República',
+            2 => 'La Guerra Civil',
+            3 => 'El franquisme',
+        ],
+        'marcador' => [300, 575],
+    ],
 ];
