@@ -32,11 +32,39 @@ INSERT INTO USUARI (correu, nom, contrasenya, progresJoc) VALUES
 GO
 
 /* =========================================================
-   CONSULTA PER COMPROVAR-HO
+   PARTIDES DE PROVA (opcional, cal haver executat els blocs d'abans)
+   Una fila per intent de nivell, igual que les desa PartidaController:
+   - durada en segons, numErrors, puntuacio (0-1000)
+   - puntuacioPonderada = puntuacio × número de nivell
+   - id_Joc i id_Nivell es busquen pel nom i per ordreDesbloqueig
    ========================================================= */
 
-SELECT j.id AS id_joc, j.nom AS joc, n.id AS id_nivell, n.ordreDesbloqueig, n.nom AS nivell
-FROM JOC j
-JOIN NIVELL n ON n.id_joc = j.id
+DECLARE @idJoc INT = (SELECT id FROM JOC WHERE nom = N'Espanya');
+DECLARE @idUsuari INT = (SELECT id FROM USUARI WHERE correu = 'espanya@test.com');
+
+INSERT INTO PARTIDA (data, durada, numErrors, puntuacio, puntuacioPonderada, id_Usuari, id_Joc, id_Nivell)
+SELECT v.data, v.durada, v.numErrors, v.puntuacio, v.puntuacio * v.nivell,
+       @idUsuari, @idJoc, n.id
+FROM (VALUES
+    ('2026-11-20T09:00:00', 265, 1,  90, 1),
+    ('2026-11-21T19:15:00', 450, 5,  50, 2),
+    ('2026-11-23T10:30:00', 390, 2,  85, 2),
+    ('2026-11-24T17:05:00', 700, 8,  25, 3),
+    ('2026-11-24T17:20:00', 560, 2,  80, 3)
+) AS v (data, durada, numErrors, puntuacio, nivell)
+JOIN NIVELL n ON n.id_joc = @idJoc AND n.ordreDesbloqueig = v.nivell;
+GO
+
+/* =========================================================
+   CONSULTA PER COMPROVAR-HO
+   Després de jugar, cada nivell acabat o perdut hi ha d'aparèixer.
+   ========================================================= */
+
+SELECT p.id, u.nom AS usuari, j.nom AS joc, n.nom AS nivell,
+       p.data, p.durada, p.numErrors, p.puntuacio, p.puntuacioPonderada
+FROM PARTIDA p
+JOIN USUARI u ON u.id = p.id_Usuari
+JOIN JOC j ON j.id = p.id_Joc
+JOIN NIVELL n ON n.id = p.id_Nivell
 WHERE j.nom = N'Espanya'
-ORDER BY n.ordreDesbloqueig;
+ORDER BY p.id DESC;
