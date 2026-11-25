@@ -12,7 +12,7 @@
    4. Botonera
    5. Panell lateral
    6. Peces reutilitzables (fitxes, caselles, línia cronològica,
-      targetes i safates)
+      targetes, safates, mapa i dossier)
    7. Modal
    8. Estats
    9. Responsive
@@ -1000,6 +1000,303 @@
     opacity: 0.8;
 }
 
+/* ---------- Tauler: contenidor d'una mecànica de col·locar fitxes ---------- */
+
+.tauler {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Fitxa seleccionada tocant-la (alternativa a arrossegar al mòbil) */
+.fitxa {
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.fitxa--seleccionada {
+    transform: translateY(-4px);
+    box-shadow: 0 0 0 2px var(--accent), 0 12px 24px rgba(0, 0, 0, 0.45);
+}
+
+.fitxa:focus-visible,
+.linia-safata:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* ---------- Il·lustracions SVG: els colors van per classe ---------- */
+
+.il-paper { fill: var(--paper); }
+.il-paper-fosc { fill: #c9bfa6; }
+.il-tinta { fill: #8c8473; }
+.il-fosc { fill: #3a3833; }
+.il-accent { fill: var(--accent); }
+.il-aigua { fill: #4f6f86; }
+
+.il-linia {
+    fill: none;
+    stroke: #2c2a26;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.il-traç-accent {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 5;
+    stroke-linecap: round;
+}
+
+/* ---------- Mapa amb agulles on es deixen fitxes ---------- */
+
+.mapa-joc {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.mapa-joc svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.mapa-joc-mar { fill: #18242b; }
+
+.mapa-joc-vei {
+    fill: #2f2d27;
+    stroke: #4a483f;
+    stroke-width: 1;
+}
+
+.mapa-joc-pais {
+    fill: var(--paper);
+    stroke: var(--bandera-1);
+    stroke-width: 1.5;
+}
+
+/* Agulla: punt sobre el mapa + nom de la ciutat + lloc on deixar el fet.
+   Per defecte la informació queda a sota del punt. */
+.agulla {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transform: translate(-50%, -7px);
+    cursor: pointer;
+}
+
+.agulla-punt {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--bandera-1);
+    box-shadow: 0 0 0 3px var(--paper), 0 0 0 4px var(--bandera-1);
+}
+
+.agulla-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Informació a sobre del punt */
+.agulla--amunt {
+    flex-direction: column-reverse;
+    transform: translate(-50%, calc(-100% + 7px));
+}
+
+.agulla--amunt .agulla-info {
+    flex-direction: column-reverse;
+}
+
+/* Informació a la dreta del punt */
+.agulla--dreta {
+    flex-direction: row;
+    align-items: flex-start;
+    transform: translate(-7px, -7px);
+}
+
+.agulla--dreta .agulla-info {
+    align-items: flex-start;
+}
+
+.agulla-nom {
+    padding: 1px 6px;
+    background: var(--paper-text);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+}
+
+.agulla-lloc {
+    min-width: 132px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border: 1px dashed var(--paper-etiqueta);
+    background: rgba(31, 30, 26, 0.85);
+    color: var(--text-suau);
+    font-size: 11px;
+}
+
+.agulla:hover .agulla-lloc,
+.agulla:focus-visible .agulla-lloc,
+.agulla.drag-over .agulla-lloc,
+.amb-seleccio .agulla:not(.lloc--correcte) .agulla-lloc {
+    border-style: solid;
+    border-color: var(--accent);
+}
+
+.agulla:focus-visible {
+    outline: none;
+}
+
+.agulla .fitxa {
+    width: 150px;
+    padding: 6px 8px;
+}
+
+.agulla .fitxa-etiqueta {
+    margin-bottom: 2px;
+}
+
+.agulla .fitxa-titol {
+    font-size: 13px;
+}
+
+/* Correcció */
+.lloc--correcte .agulla-lloc {
+    border: 2px solid var(--verd);
+}
+
+.lloc--correcte .agulla-punt {
+    background: var(--verd);
+    box-shadow: 0 0 0 3px var(--paper), 0 0 0 4px var(--verd);
+}
+
+.lloc--incorrecte .agulla-lloc {
+    border: 2px solid var(--vermell);
+}
+
+/* ---------- Dossier d'arxiu amb formulari i segell ---------- */
+
+.dossier {
+    position: relative;
+    width: min(620px, 100%);
+    margin: 0 auto;
+    padding: 0 30px 26px;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--paper-text);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+
+.dossier-cap {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 -30px 18px;
+    padding: 14px 30px 10px;
+    border-bottom: 2px solid var(--bandera-1);
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    color: var(--paper-etiqueta);
+}
+
+.dossier-text {
+    min-height: 3em;
+    margin: 0 0 22px;
+    font-family: var(--font-document);
+    font-size: 22px;
+    line-height: 1.4;
+}
+
+.dossier-camp {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px;
+}
+
+.dossier-etiqueta {
+    width: 100%;
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    color: var(--paper-etiqueta);
+}
+
+.dossier-any {
+    width: 140px;
+    padding: 6px 4px;
+    border: 0;
+    border-bottom: 2px solid var(--paper-text);
+    background: transparent;
+    color: var(--paper-text);
+    font-family: var(--font-document);
+    font-size: 30px;
+    letter-spacing: 0.12em;
+}
+
+.dossier-any:focus {
+    outline: none;
+    border-bottom-color: var(--bandera-1);
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.dossier-any--error {
+    border-bottom-color: var(--bandera-1);
+}
+
+.dossier-error {
+    min-height: 1.4em;
+    margin: 12px 0 0;
+    color: var(--bandera-1);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Segell que apareix en arxivar */
+.segell-arxiu {
+    position: absolute;
+    right: 26px;
+    bottom: 22px;
+    padding: 6px 14px;
+    border: 4px double var(--verd);
+    color: var(--verd);
+    font-family: var(--sans);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    opacity: 0;
+    transform: rotate(-12deg) scale(1.6);
+    pointer-events: none;
+}
+
+.dossier--arxivat .segell-arxiu {
+    opacity: 1;
+    transform: rotate(-12deg) scale(1);
+    transition: opacity 0.2s, transform 0.25s cubic-bezier(0.3, 1.6, 0.6, 1);
+}
+
+/* ---------- Joc d'Espanya: posició de les ciutats al mapa ---------- */
+
+.joc-espanya .agulla--madrid { left: 40.2%; top: 44.5%; }
+.joc-espanya .agulla--barcelona { left: 81.2%; top: 31.7%; }
+.joc-espanya .agulla--oviedo { left: 25.8%; top: 9.1%; }
+.joc-espanya .agulla--sevilla { left: 23%; top: 80%; }
+
 /* =========================================================
    7. MODAL
    ========================================================= */
@@ -1142,6 +1439,47 @@
     .telegrama-text {
         font-size: 18px;
     }
+
+    .agulla-lloc,
+    .agulla .fitxa {
+        min-width: 0;
+        width: 92px;
+    }
+
+    .agulla-lloc {
+        min-height: 32px;
+        font-size: 9px;
+    }
+
+    .agulla .fitxa {
+        padding: 4px 6px;
+    }
+
+    .agulla .fitxa-etiqueta {
+        display: none;
+    }
+
+    .agulla .fitxa-titol {
+        font-size: 10px;
+    }
+
+    .agulla-nom {
+        font-size: 8px;
+        letter-spacing: 0.12em;
+    }
+
+    .dossier {
+        padding: 0 18px 20px;
+    }
+
+    .dossier-cap {
+        margin: 0 -18px 14px;
+        padding: 12px 18px 8px;
+    }
+
+    .dossier-text {
+        font-size: 18px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1150,7 +1488,9 @@
     .targeta--error,
     .telegrama,
     .safata-vf,
-    .safata-vf--error {
+    .safata-vf--error,
+    .fitxa,
+    .dossier--arxivat .segell-arxiu {
         animation: none;
         transition: none;
     }
