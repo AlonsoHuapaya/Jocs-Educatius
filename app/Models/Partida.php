@@ -17,6 +17,18 @@ class Partida extends Model
     protected $table = 'PARTIDA';
     public $timestamps = false;
 
+    /**
+     * La columna guanyada és un BIT a SQL Server: es llegeix com a booleà.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'guanyada' => 'boolean',
+        ];
+    }
+
   
     public function usuari(): BelongsTo
     {

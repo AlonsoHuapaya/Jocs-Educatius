@@ -13,4 +13,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/joc/{codi}', [App\Http\Controllers\JocController::class, 'show'])->name('joc.show');
     Route::post('/joc/{codi}/superat', [App\Http\Controllers\JocController::class, 'superat'])->name('joc.superat');
+
+    // El joc hi envia cada partida acabada: nivell guanyat o perdut (de moment, només el d'Espanya)
+    Route::post('/partides', [App\Http\Controllers\PartidaController::class, 'store'])->name('partides.store');
 });
