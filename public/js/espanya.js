@@ -4,11 +4,6 @@
 
 /* ---------- Utilitats ---------- */
 
-const barrejar = (llista) => llista
-    .map((element) => ({ element, ordre: Math.random() }))
-    .sort((a, b) => a.ordre - b.ordre)
-    .map(({ element }) => element);
-
 const clonar = (id) => document.getElementById(id).content.firstElementChild.cloneNode(true);
 
 function omplir(element, textos) {
@@ -18,48 +13,13 @@ function omplir(element, textos) {
     return element;
 }
 
-/** Errors: perd un intent i vibra al mòbil si el navegador ho permet */
+/** Errors: perd un intent i la Núria explica què ha fallat */
 function fallar(motor, missatge) {
-    navigator.vibrate?.(80);
     motor.error();
     motor.diuNuria(missatge);
 }
 
-/* ---------- Registre local: nivell on es va quedar i rècords ----------
-   localStorage (i no sessionStorage) perquè ha de durar entre visites. */
-
-class RegistreLocal {
-    constructor(prefix) {
-        this.prefix = prefix;
-    }
-
-    llegir(clau, perDefecte = null) {
-        try {
-            return JSON.parse(localStorage.getItem(`${this.prefix}.${clau}`)) ?? perDefecte;
-        } catch {
-            return perDefecte;
-        }
-    }
-
-    desar(clau, valor) {
-        try {
-            localStorage.setItem(`${this.prefix}.${clau}`, JSON.stringify(valor));
-        } catch {
-            // Navegació privada: el joc continua sense desar
-        }
-    }
-
-    /** Torna true si és un rècord nou */
-    desarRecord(nivell, punts) {
-        if (this.llegir(`record-${nivell}`)?.punts >= punts) {
-            return false;
-        }
-        this.desar(`record-${nivell}`, { punts, data: new Date().toLocaleDateString('ca-ES') });
-        return true;
-    }
-}
-
-/* ---------- Tauler de fitxes: arrossegar o tocar fitxa + lloc ----------
+/* ---------- Tauler de fitxes: arrossegar o fer clic a la fitxa i després al lloc ----------
    Delegació: un sol listener a l'arrel per a totes les fitxes i llocs. */
 
 class TaulerFitxes {
@@ -181,36 +141,12 @@ const FETS_FRANQUISME = [
 const FORMAT_ANY = /^\d{4}$/; // exactament quatre xifres
 const [INICI, FI] = [1939, 1975];
 
-/* ---------- Progrés i rècords ---------- */
-
-const registre = new RegistreLocal('arxiu-historic.espanya');
-
-function mostrarRecord(nivell) {
-    document.getElementById('estat-record').textContent = registre.llegir(`record-${nivell}`)?.punts ?? '—';
-}
-
-/** Desa el rècord i el nivell següent (en acabar l'últim, es torna a començar) */
-function nivellCompletat(nivell) {
-    const punts = Number(document.getElementById('marcador-punts').textContent) || 0;
-    if (registre.desarRecord(nivell, punts)) {
-        mostrarRecord(nivell);
-        motor.diuNuria(`Nou rècord en aquest nivell: ${punts} punts!`);
-    }
-    registre.desar('nivell', nivell < NIVELLS.length ? nivell + 1 : 1);
-}
-
-// Si ja havia jugat, comença pel nivell on s'havia quedat
-document.body.dataset.nivellInicial = Math.max(
-    Number(document.body.dataset.nivellInicial) || 1,
-    registre.llegir('nivell', 1),
-);
-
 /* ---------- Nivells ---------- */
 
 const NIVELLS = [
     {
         titol: 'La Segona República',
-        instruccio: 'Situa cada fet a la seva ciutat: arrossega\'l, o toca el fet i després la ciutat. Quan acabis, prem «Comprova».',
+        instruccio: 'Situa cada fet a la seva ciutat: arrossega\'l, o fes clic al fet i després a la ciutat. Quan acabis, prem «Comprova».',
         nuria: 'Abril de 1931: el rei Alfons XIII marxa i neix la República. Però no tot passa a Madrid…',
         pistes: [
             'El govern provisional va proclamar la República a la Puerta del Sol.',
@@ -220,8 +156,6 @@ const NIVELLS = [
         reptes: FETS_REPUBLICA.length,
 
         preparar(zona) {
-            mostrarRecord(1);
-            this.resolts = 0;
             // Tauler nou a cada partida: així el listener delegat no es duplica en reiniciar
             const arrel = clonar('plantilla-tauler');
             zona.appendChild(arrel);
@@ -235,7 +169,7 @@ const NIVELLS = [
                 this.tauler.afegirLloc(agulla);
             });
 
-            barrejar(FETS_REPUBLICA).forEach(({ id, any, titol }) => {
+            MotorJoc.barrejar(FETS_REPUBLICA).forEach(({ id, any, titol }) => {
                 const fitxa = omplir(clonar('plantilla-fitxa'), { '.fitxa-etiqueta': `${any} · FET`, '.fitxa-titol': titol });
                 fitxa.id = `fet-${id}`;
                 fitxa.dataset.id = id;
@@ -251,15 +185,12 @@ const NIVELLS = [
             }
             const encerts = resultats.filter(({ correcte }) => correcte);
             encerts.forEach(({ lloc }) => {
-                this.resolts++;
                 motor.encert();
                 motor.afegirDocument(lloc.dataset.nom);
                 motor.repteSuperat();
             });
 
-            if (this.resolts === FETS_REPUBLICA.length) {
-                nivellCompletat(1);
-            } else if (encerts.length < resultats.length) {
+            if (encerts.length < resultats.length) {
                 fallar(motor, `${encerts.length} de ${resultats.length} ben situats. T'he tornat els altres a la safata.`);
             }
         },
@@ -277,8 +208,7 @@ const NIVELLS = [
         reptes: CONCEPTES_GUERRA.length,
 
         preparar(zona, motor) {
-            mostrarRecord(2);
-            const preguntes = barrejar(CONCEPTES_GUERRA);
+            const preguntes = MotorJoc.barrejar(CONCEPTES_GUERRA);
             let actual = 0;
 
             const documentArxiu = clonar('plantilla-document');
@@ -289,7 +219,7 @@ const NIVELLS = [
 
             const targetes = document.createElement('div');
             targetes.className = 'targetes';
-            targetes.append(...barrejar(CONCEPTES_GUERRA).map(({ nom, any, il }) => {
+            targetes.append(...MotorJoc.barrejar(CONCEPTES_GUERRA).map(({ nom, any, il }) => {
                 const targeta = omplir(clonar('plantilla-targeta'), { '.fitxa-etiqueta': any, '.fitxa-titol': nom });
                 targeta.dataset.nom = nom;
                 targeta.querySelector('.targeta-imatge').appendChild(clonar(il));
@@ -317,8 +247,6 @@ const NIVELLS = [
                 motor.repteSuperat();
                 if (actual < preguntes.length) {
                     mostrarDocument();
-                } else {
-                    nivellCompletat(2);
                 }
             });
 
@@ -335,8 +263,7 @@ const NIVELLS = [
         reptes: FETS_FRANQUISME.length,
 
         preparar(zona, motor) {
-            mostrarRecord(3);
-            const fets = barrejar(FETS_FRANQUISME);
+            const fets = MotorJoc.barrejar(FETS_FRANQUISME);
             let actual = 0;
 
             const resultats = document.createElement('ol');
@@ -395,8 +322,6 @@ const NIVELLS = [
                 motor.repteSuperat();
                 if (actual < fets.length) {
                     setTimeout(mostrarFet, 900);
-                } else {
-                    nivellCompletat(3);
                 }
             });
 

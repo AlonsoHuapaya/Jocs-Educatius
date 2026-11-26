@@ -1008,7 +1008,7 @@
     gap: 24px;
 }
 
-/* Fitxa seleccionada tocant-la (alternativa a arrossegar al mòbil) */
+/* Fitxa seleccionada amb un clic (alternativa a arrossegar, també amb el teclat) */
 .fitxa {
     transition: transform 0.15s, box-shadow 0.15s;
 }
