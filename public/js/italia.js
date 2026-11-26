@@ -229,7 +229,6 @@ const NIVELLS = [
             const totsResolts = zona.querySelectorAll('.casella--correcta').length === FETS_ASCENS.length;
 
             if (totsResolts) {
-                motor.afegirDocument('Marxa sobre Roma');
                 motor.diuNuria('Amb la Marxa sobre Roma, Mussolini arriba al poder sense guanyar cap elecció.');
             }
             for (let i = 0; i < encerts; i++) {
@@ -279,7 +278,6 @@ const NIVELLS = [
                 motor.encert();
                 motor.diuNuria(`Correcte: ${carpeta.dataset.nom}.`);
                 if (arxivades === MESURES.length) {
-                    motor.afegirDocument('Noticiari Luce');
                     motor.diuNuria('Control, propaganda i organització de la vida diària: així es construeix un règim totalitari.');
                 }
                 motor.repteSuperat();
@@ -350,7 +348,6 @@ const NIVELLS = [
                 motor.encert();
                 motor.diuNuria(`Correcte! ${consequencia.querySelector('.parella-text').textContent}.`);
                 if (unides === PARELLES.length) {
-                    motor.afegirDocument('Ràdio Londres');
                     motor.diuNuria('La Marxa sobre Roma va inspirar Hitler: el 1923 va intentar el seu propi cop a Munic. Obrim l\'expedient d\'Alemanya.');
                 }
                 motor.repteSuperat();
