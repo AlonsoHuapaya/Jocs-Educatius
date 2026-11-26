@@ -3,7 +3,7 @@
 @section('title', $joc['nom'] . ' | Arxiu Històric')
 
 @section('content')
-    {{-- La mecànica de cada nivell la crea public/js/jocs/espanya.js --}}
+    {{-- La mecànica de cada nivell la crea public/js/espanya.js --}}
 @endsection
 
 @section('scripts')
