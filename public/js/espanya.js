@@ -246,7 +246,8 @@ const NIVELLS = [
         reptes: FETS_REPUBLICA.length,
 
         preparar(zona) {
-            mostrarRecord(1);
+<<<<<<<<< Temporary merge branch 1
+            iniciNivell(1);
             this.resolts = 0;
             // Tauler nou a cada partida: així el listener delegat no es duplica en reiniciar
             const arrel = clonar('plantilla-tauler');
@@ -299,8 +300,12 @@ const NIVELLS = [
         reptes: CONCEPTES_GUERRA.length,
 
         preparar(zona, motor) {
-            mostrarRecord(2);
+<<<<<<<<< Temporary merge branch 1
+            iniciNivell(2);
             const preguntes = barrejar(CONCEPTES_GUERRA);
+=========
+            const preguntes = MotorJoc.barrejar(CONCEPTES_GUERRA);
+>>>>>>>>> Temporary merge branch 2
             let actual = 0;
 
             const documentArxiu = clonar('plantilla-document');
@@ -355,8 +360,12 @@ const NIVELLS = [
         reptes: FETS_FRANQUISME.length,
 
         preparar(zona, motor) {
-            mostrarRecord(3);
+<<<<<<<<< Temporary merge branch 1
+            iniciNivell(3);
             const fets = barrejar(FETS_FRANQUISME);
+=========
+            const fets = MotorJoc.barrejar(FETS_FRANQUISME);
+>>>>>>>>> Temporary merge branch 2
             let actual = 0;
 
             const resultats = document.createElement('ol');
