@@ -3,7 +3,7 @@
 
    Gestiona tot el que és igual als tres jocs: nivells, temps,
    intents, pistes de la Núria, puntuació, rècords, nivell on
-   s'havia quedat l'usuari, documents trobats, modals i mètriques.
+   s'havia quedat l'usuari, modals i mètriques.
    Cada joc només programa la mecànica dels seus nivells i avisa
    el motor quan l'usuari encerta o falla.
 
@@ -48,7 +48,6 @@
        motor.encert()             → una resposta correcta (estadística)
        motor.error()              → resta un intent i punts
        motor.repteSuperat()       → avança el progrés; en acabar els reptes, supera el nivell
-       motor.afegirDocument(text) → omple la següent casella de «Documents trobats»
        motor.diuNuria(text)       → canvia el text de la bafarada de la Núria
        motor.nivell               → número del nivell actual
        motor.punts                → punts que porta el nivell actual
@@ -135,7 +134,6 @@ class MotorJoc {
     #pistesUsades = 0;
     #reptesSuperats = 0;
     #puntsTotals = 0;   // suma dels punts dels nivells superats
-    #documentsTrobats = 0;
     #nivellEnCurs = false; // false quan el nivell ja s'ha superat o fallat
 
     #sessionId;
@@ -239,24 +237,6 @@ class MotorJoc {
     }
 
     /**
-     * Omple la següent casella buida de «Documents trobats»
-     * @param {string} text Text curt del document (p. ex. "Cartell 1919")
-     */
-    afegirDocument(text) {
-        const caselles = this.#el.documents.querySelectorAll('.document');
-        if (this.#documentsTrobats >= caselles.length) {
-            return;
-        }
-
-        const casella = caselles[this.#documentsTrobats];
-        casella.classList.remove('document--buit');
-        casella.textContent = text;
-        casella.setAttribute('role', 'img');
-        casella.setAttribute('aria-label', `Document trobat: ${text}`);
-        this.#documentsTrobats++;
-    }
-
-    /**
      * Canvia el missatge de la Núria
      * @param {string} text
      */
@@ -344,7 +324,6 @@ class MotorJoc {
 
             nuria: document.querySelector('#nuria-text'),
             pistesValor: document.querySelector('#pistes-valor'),
-            documents: document.querySelector('#documents'),
             estatEncerts: document.querySelector('#estat-encerts'),
             estatErrors: document.querySelector('#estat-errors'),
             estatPistes: document.querySelector('#estat-pistes'),

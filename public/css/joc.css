@@ -527,33 +527,6 @@
     color: var(--text-suau);
 }
 
-/* Documents trobats */
-.documents {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-}
-
-.document {
-    aspect-ratio: 3 / 4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    text-align: center;
-    font-family: var(--font-joc);
-    font-size: 12px;
-    background: var(--paper);
-    color: var(--paper-etiqueta);
-}
-
-.document--buit {
-    border: 1px solid var(--vora);
-    background: #23221d;
-    color: #57544a;
-    font-size: 18px;
-}
-
 /* Estadístiques */
 .estadistiques {
     display: grid;
