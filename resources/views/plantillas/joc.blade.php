@@ -24,6 +24,7 @@
     {{-- Les dades que necessita el motor (joc-comu.js) van als atributs data-* --}}
     <body class="pagina-joc joc-{{ $codi }}"
           data-codi="{{ $codi }}"
+          data-usuari="{{ auth()->id() }}"
           data-nivell-inicial="1"
           data-url-mapa="{{ route('inici') }}">
 
