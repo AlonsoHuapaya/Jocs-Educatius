@@ -1460,6 +1460,44 @@
     line-height: 1.25;
 }
 
+/* ---------- Joc d'Alemanya ---------- */
+
+/* Colors de les il·lustracions que només fa servir Alemanya */
+.il-marro { fill: #8a6a43; }
+.il-marro-fosc { fill: #3a2e22; }
+.il-gris { fill: #4a4740; }
+
+/* Traços: el gruix va a l'atribut stroke-width de cada element */
+.il-traç-paper {
+    fill: none;
+    stroke: var(--paper);
+    stroke-linecap: round;
+}
+
+.il-contorn-accent {
+    fill: none;
+    stroke: var(--accent);
+}
+
+.il-linia-marro {
+    fill: none;
+    stroke: #5c4630;
+    stroke-width: 3;
+}
+
+/* Camp del nom d'agent (registre d'entrada) */
+.dossier-nom {
+    width: min(340px, 100%);
+    font-size: 24px;
+    letter-spacing: 0.04em;
+}
+
+/* Caselles on es pot deixar la fitxa seleccionada amb un clic */
+.joc-alemanya .amb-seleccio .casella:not(.casella--correcta) {
+    border-style: solid;
+    border-color: var(--accent);
+}
+
 /* =========================================================
    7. MODAL
    ========================================================= */
