@@ -253,7 +253,6 @@ const NIVELLS = [
             encerts.forEach(({ lloc }) => {
                 this.resolts++;
                 motor.encert();
-                motor.afegirDocument(lloc.dataset.nom);
                 motor.repteSuperat();
             });
 

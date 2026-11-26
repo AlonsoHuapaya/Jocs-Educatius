@@ -142,16 +142,6 @@
                 {{-- Bloc de context del nivell (mapa, cronologia, peça del patró…), propi de cada joc --}}
                 @yield('panell')
 
-                <div class="panell-bloc">
-                    <h2 class="eyebrow eyebrow--or">DOCUMENTS TROBATS</h2>
-                    <div id="documents" class="documents">
-                        <div class="document document--buit">?</div>
-                        <div class="document document--buit">?</div>
-                        <div class="document document--buit">?</div>
-                        <div class="document document--buit">?</div>
-                    </div>
-                </div>
-
                 <dl class="estadistiques">
                     <div><dt>ENCERTS</dt><dd id="estat-encerts">0</dd></div>
                     <div><dt>ERRORS</dt><dd id="estat-errors">0</dd></div>
