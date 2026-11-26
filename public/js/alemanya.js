@@ -104,7 +104,6 @@ const motor = new MotorJoc({
             casella.classList.add("casella--correcta");
             fitxa.draggable = false;
             motor.encert();
-            motor.afegirDocument(casella.dataset.any);
             motor.repteSuperat();
           } else {
             hiHaErrors = true;

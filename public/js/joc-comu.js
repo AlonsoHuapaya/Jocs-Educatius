@@ -2,11 +2,27 @@
    Arxiu Històric · Motor comú dels jocs (joc-comu.js)
 
    Gestiona tot el que és igual als tres jocs: nivells, temps,
-   intents, pistes de la Núria, puntuació, documents trobats,
-   modals i mètriques. Cada joc només programa la mecànica dels
-   seus nivells i avisa el motor quan l'usuari encerta o falla.
+   intents, pistes de la Núria, puntuació, rècords, nivell on
+   s'havia quedat l'usuari, modals i mètriques.
+   Cada joc només programa la mecànica dels seus nivells i avisa
+   el motor quan l'usuari encerta o falla.
 
-   Ús des del JS de cada joc (per exemple, public/js/jocs/italia.js):
+   Estructura que segueixen els tres jocs ({codi} = italia, alemanya, espanya):
+       resources/views/jocs/{codi}.blade.php
+           @extends('plantillas.joc'). L'HTML de les peces del joc va dins
+           de <template id="..."> a la secció 'scripts', abans del <script>.
+       public/js/{codi}.js
+           Les dades i els nivells. Clona les <template> i les omple amb
+           textContent: sense innerHTML ni atributs style="...".
+       public/css/joc.css
+           L'aspecte: les variables del bloc .joc-{codi} i, si cal, un
+           apartat propi del joc al final de la secció 6.
+       Codi amb 4 espais, cometes simples i noms en català.
+
+   El rècord i el nivell on s'havia quedat ja els desa el motor:
+   els jocs no han de fer servir localStorage per a això.
+
+   Ús des del JS de cada joc (per exemple, public/js/italia.js):
 
        const motor = new MotorJoc({
            nivells: [
@@ -32,10 +48,58 @@
        motor.encert()             → una resposta correcta (estadística)
        motor.error()              → resta un intent i punts
        motor.repteSuperat()       → avança el progrés; en acabar els reptes, supera el nivell
-       motor.afegirDocument(text) → omple la següent casella de «Documents trobats»
        motor.diuNuria(text)       → canvia el text de la bafarada de la Núria
        motor.nivell               → número del nivell actual
+       motor.punts                → punts que porta el nivell actual
+       MotorJoc.barrejar(llista)  → còpia de la llista en ordre aleatori
    ========================================================= */
+
+/* =========================================================
+   Magatzem del joc (localStorage)
+
+   Desa el nivell on s'ha quedat l'usuari i el rècord de cada
+   nivell. Les claus porten l'usuari i el joc perquè dos usuaris
+   del mateix navegador no es barregin:
+       arxiu-historic.{usuari}.{codi}.nivell
+       arxiu-historic.{usuari}.{codi}.record-{nivell}
+   ========================================================= */
+
+class MagatzemJoc {
+    #prefix;
+
+    /**
+     * @param {string} usuari Id de l'usuari (data-usuari de la plantilla)
+     * @param {string} codi Codi del joc (data-codi de la plantilla)
+     */
+    constructor(usuari, codi) {
+        this.#prefix = `arxiu-historic.${usuari}.${codi}`;
+    }
+
+    /**
+     * @param {string} clau
+     * @param {*} perDefecte Valor si no hi ha res desat o no es pot llegir
+     */
+    llegir(clau, perDefecte = null) {
+        try {
+            const valor = localStorage.getItem(`${this.#prefix}.${clau}`);
+            return valor === null ? perDefecte : JSON.parse(valor);
+        } catch {
+            return perDefecte; // navegació privada o dada malmesa
+        }
+    }
+
+    /**
+     * @param {string} clau
+     * @param {*} valor Qualsevol valor que es pugui passar a JSON
+     */
+    desar(clau, valor) {
+        try {
+            localStorage.setItem(`${this.#prefix}.${clau}`, JSON.stringify(valor));
+        } catch {
+            // Navegació privada o sense espai: el joc continua sense desar
+        }
+    }
+}
 
 class MotorJoc {
     /* ---------- Regles comunes als tres jocs ---------- */
@@ -59,6 +123,7 @@ class MotorJoc {
     #nivells;
     #el = {};           // referències als elements del DOM de la carcassa
     #codi;
+    #magatzem;          // rècords i nivell on s'ha quedat (localStorage)
 
     #nivellActual = 1;
     #segons = 0;
@@ -69,7 +134,6 @@ class MotorJoc {
     #pistesUsades = 0;
     #reptesSuperats = 0;
     #puntsTotals = 0;   // suma dels punts dels nivells superats
-    #documentsTrobats = 0;
     #nivellEnCurs = false; // false quan el nivell ja s'ha superat o fallat
 
     #sessionId;
@@ -86,6 +150,7 @@ class MotorJoc {
 
         this.#nivells = config.nivells;
         this.#codi = document.body.dataset.codi;
+        this.#magatzem = new MagatzemJoc(document.body.dataset.usuari || 'convidat', this.#codi);
 
         // Dades de la sessió per a les mètriques
         this.#iniciSessio = new Date();
@@ -94,9 +159,12 @@ class MotorJoc {
         this.#agafarElements();
         this.#registrarEsdeveniments();
 
-        // Nivell on comença l'usuari (el posa el servidor a data-nivell-inicial)
-        const nivellInicial = Number(document.body.dataset.nivellInicial) || 1;
-        this.#carregarNivell(Math.min(nivellInicial, this.#nivells.length));
+        // Nivell on comença l'usuari: el més alt entre el del servidor
+        // (data-nivell-inicial) i el que es va desar l'última vegada
+        const nivellServidor = Number(document.body.dataset.nivellInicial) || 1;
+        const nivellDesat = Number(this.#magatzem.llegir('nivell', 1)) || 1;
+        const nivellInicial = Math.max(nivellServidor, nivellDesat);
+        this.#carregarNivell(Math.min(Math.max(1, nivellInicial), this.#nivells.length));
     }
 
     /* =========================================================
@@ -106,6 +174,25 @@ class MotorJoc {
     /** Número del nivell actual (1, 2 o 3) */
     get nivell() {
         return this.#nivellActual;
+    }
+
+    /** Punts que porta el nivell actual (els mateixos que mostra el marcador) */
+    get punts() {
+        return this.#puntsNivell();
+    }
+
+    /**
+     * Torna una còpia de la llista en ordre aleatori (algorisme de Fisher-Yates)
+     * @param {Array} llista
+     * @returns {Array}
+     */
+    static barrejar(llista) {
+        const copia = [...llista];
+        for (let i = copia.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [copia[i], copia[j]] = [copia[j], copia[i]];
+        }
+        return copia;
     }
 
     /** L'usuari ha encertat una resposta o una peça */
@@ -147,24 +234,6 @@ class MotorJoc {
             // Petita espera perquè l'usuari vegi l'últim moviment abans del modal
             setTimeout(() => this.#nivellSuperat(), 400);
         }
-    }
-
-    /**
-     * Omple la següent casella buida de «Documents trobats»
-     * @param {string} text Text curt del document (p. ex. "Cartell 1919")
-     */
-    afegirDocument(text) {
-        const caselles = this.#el.documents.querySelectorAll('.document');
-        if (this.#documentsTrobats >= caselles.length) {
-            return;
-        }
-
-        const casella = caselles[this.#documentsTrobats];
-        casella.classList.remove('document--buit');
-        casella.textContent = text;
-        casella.setAttribute('role', 'img');
-        casella.setAttribute('aria-label', `Document trobat: ${text}`);
-        this.#documentsTrobats++;
     }
 
     /**
@@ -255,10 +324,10 @@ class MotorJoc {
 
             nuria: document.querySelector('#nuria-text'),
             pistesValor: document.querySelector('#pistes-valor'),
-            documents: document.querySelector('#documents'),
             estatEncerts: document.querySelector('#estat-encerts'),
             estatErrors: document.querySelector('#estat-errors'),
             estatPistes: document.querySelector('#estat-pistes'),
+            estatRecord: document.querySelector('#estat-record'),
 
             modal: document.querySelector('#modal'),
             modalEyebrow: document.querySelector('#modal-eyebrow'),
@@ -294,6 +363,9 @@ class MotorJoc {
         this.#reptesSuperats = 0;
         this.#nivellEnCurs = true;
 
+        // Si surt del joc ara, la propera vegada tornarà a aquest nivell
+        this.#magatzem.desar('nivell', numero);
+
         const nivell = this.#dadesNivell();
 
         // Textos del repte
@@ -317,6 +389,7 @@ class MotorJoc {
         this.#actualitzarEstadistiques();
         this.#actualitzarRellotge();
         this.#actualitzarPunts();
+        this.#actualitzarRecord();
 
         this.#mostrarBriefing();
     }
@@ -350,11 +423,15 @@ class MotorJoc {
         }
 
         const esUltim = this.#nivellActual >= this.#nivells.length;
+        const nouRecord = this.#desarRecord(punts);
+
+        // La propera vegada comença pel nivell següent (o pel primer si ja l'ha acabat)
+        this.#magatzem.desar('nivell', esUltim ? 1 : this.#nivellActual + 1);
 
         this.#obrirModal({
             eyebrow: `NIVELL ${this.#nivellActual} · SUPERAT`,
             titol: esUltim ? 'Has resolt l\'últim nivell' : 'Nivell superat',
-            text: '',
+            text: nouRecord ? `Nou rècord en aquest nivell: ${punts} punts!` : '',
             resum: [
                 ['TEMPS', this.#formatTemps(this.#segons)],
                 ['ERRORS', this.#errors],
@@ -548,6 +625,28 @@ class MotorJoc {
         this.#el.estatEncerts.textContent = this.#encerts;
         this.#el.estatErrors.textContent = this.#errors;
         this.#el.estatPistes.textContent = this.#pistesUsades;
+    }
+
+    /** Mostra el rècord del nivell actual a les estadístiques */
+    #actualitzarRecord() {
+        const record = this.#magatzem.llegir(`record-${this.#nivellActual}`);
+        this.#el.estatRecord.textContent = record?.punts ?? '—';
+    }
+
+    /**
+     * Desa els punts si superen el rècord del nivell actual
+     * @param {number} punts
+     * @returns {boolean} true si és un rècord nou
+     */
+    #desarRecord(punts) {
+        const record = this.#magatzem.llegir(`record-${this.#nivellActual}`);
+        if (record !== null && record.punts >= punts) {
+            return false;
+        }
+
+        this.#magatzem.desar(`record-${this.#nivellActual}`, { punts, data: new Date().toISOString() });
+        this.#actualitzarRecord();
+        return true;
     }
 
     #actualitzarProgres() {
