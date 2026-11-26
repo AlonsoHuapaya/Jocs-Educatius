@@ -1270,6 +1270,196 @@
 .joc-espanya .agulla--oviedo { left: 25.8%; top: 9.1%; }
 .joc-espanya .agulla--sevilla { left: 23%; top: 80%; }
 
+/* ---------- Joc d'Itàlia: línia per ordenar (nivell 1) ---------- */
+
+/* Les fitxes ja resoltes no es poden moure */
+.casella--correcta .fitxa {
+    cursor: default;
+}
+
+/* ---------- Joc d'Itàlia: carpetes de l'arxiu (nivell 2) ---------- */
+
+.carpetes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-top: 12px;
+}
+
+.carpeta {
+    position: relative;
+    min-width: 0;
+    min-height: 210px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px 16px 16px;
+    border: 1px solid var(--vora);
+    border-top: 3px solid var(--accent);
+    background: rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+}
+
+/* Pestanya de la carpeta */
+.carpeta::before {
+    content: '';
+    position: absolute;
+    top: -13px;
+    left: -1px;
+    width: 110px;
+    height: 10px;
+    border: 1px solid var(--vora);
+    border-bottom: 0;
+    background: var(--fons-zona);
+}
+
+.carpeta:hover,
+.carpeta.drag-over {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+}
+
+.carpeta:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.carpeta-nom {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.carpeta-descripcio {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--text-suau);
+}
+
+.carpeta-contingut {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Dins de la carpeta, la tira es llegeix sencera */
+.carpeta .tira {
+    white-space: normal;
+}
+
+.carpeta--error {
+    border-color: var(--vermell);
+    animation: tremola 0.4s;
+}
+
+/* ---------- Joc d'Itàlia: unir causes i conseqüències (nivell 3) ---------- */
+
+.parelles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px 32px;
+}
+
+.parelles-titol {
+    margin: 0 0 10px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    color: var(--text-suau);
+}
+
+.parelles-llista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.parella {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    border: 0;
+    background: var(--paper);
+    color: var(--paper-text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.parella:hover:not(:disabled),
+.parella.drag-over {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 2px var(--accent);
+}
+
+.parella:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.parella--seleccionada,
+.parella--seleccionada:hover:not(:disabled),
+.parella.arrossegant {
+    transform: translateX(8px);
+    box-shadow: 0 0 0 2px var(--accent), 0 12px 24px rgba(0, 0, 0, 0.45);
+}
+
+.parella--unida {
+    cursor: default;
+    box-shadow: 0 0 0 2px var(--verd);
+}
+
+.parella--error {
+    box-shadow: 0 0 0 2px var(--vermell);
+    animation: tremola 0.4s;
+}
+
+/* Cercle on surt el número de la parella quan s'uneix */
+.parella-numero {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--paper-etiqueta);
+    border-radius: 50%;
+    font-family: var(--font-joc);
+    font-size: 16px;
+}
+
+.parella--unida .parella-numero {
+    border: 0;
+    background: var(--verd);
+    color: var(--paper);
+}
+
+.parella-cos {
+    display: block;
+}
+
+.parella .fitxa-etiqueta {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 9px;
+}
+
+.parella-text {
+    display: block;
+    font-family: var(--font-joc);
+    font-size: 16px;
+    line-height: 1.25;
+}
+
 /* =========================================================
    7. MODAL
    ========================================================= */
