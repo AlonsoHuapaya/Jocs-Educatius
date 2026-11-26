@@ -35,7 +35,6 @@ class PartidaController extends Controller
      * - perduda: gasta els 3 intents o s'acaba el temps (llavors la puntuació és 0).
      *
      * El joc es busca a la BD pel nom de config/jocs.php i el nivell per ordreDesbloqueig.
-     * La puntuació ponderada és punts × número de nivell: els nivells difícils valen més.
      */
     public function store(Request $request): JsonResponse
     {
@@ -60,7 +59,6 @@ class PartidaController extends Controller
         $partida->durada = $dades['durada'];
         $partida->numErrors = $dades['errors'];
         $partida->puntuacio = $puntuacio;
-        $partida->puntuacioPonderada = $puntuacio * $dades['nivell'];
         $partida->guanyada = $dades['guanyada'];
         $partida->id_Usuari = Auth::id();
         $partida->id_Joc = $joc->id;

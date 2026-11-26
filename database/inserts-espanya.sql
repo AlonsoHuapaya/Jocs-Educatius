@@ -38,14 +38,13 @@ GO
    - es completa el nivell        → guanyada = 1, puntuacio = punts del motor (0-1000)
    - es gasten els 3 intents      → guanyada = 0, puntuacio = 0
    - s'acaba el temps (nivell 3)  → guanyada = 0, puntuacio = 0
-   puntuacioPonderada = puntuacio × número de nivell
    ========================================================= */
 
 DECLARE @idJoc INT = (SELECT id FROM JOC WHERE nom = N'Espanya');
 DECLARE @idUsuari INT = (SELECT id FROM USUARI WHERE correu = 'espanya@test.com');
 
-INSERT INTO PARTIDA (data, durada, numErrors, puntuacio, puntuacioPonderada, guanyada, id_Usuari, id_Joc, id_Nivell)
-SELECT v.data, v.durada, v.numErrors, v.puntuacio, v.puntuacio * v.nivell, v.guanyada,
+INSERT INTO PARTIDA (data, durada, numErrors, puntuacio, guanyada, id_Usuari, id_Joc, id_Nivell)
+SELECT v.data, v.durada, v.numErrors, v.puntuacio, v.guanyada,
        @idUsuari, @idJoc, n.id
 FROM (VALUES
     -- data                  durada errors punts nivell guanyada
@@ -64,7 +63,7 @@ GO
    ========================================================= */
 
 SELECT p.id, u.nom AS usuari, j.nom AS joc, n.nom AS nivell, p.data, p.durada,
-       p.numErrors, p.puntuacio, p.puntuacioPonderada,
+       p.numErrors, p.puntuacio,
        CASE p.guanyada WHEN 1 THEN 'Guanyada' ELSE 'Perduda' END AS resultat
 FROM PARTIDA p
 JOIN USUARI u ON u.id = p.id_Usuari
