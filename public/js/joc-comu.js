@@ -3,7 +3,8 @@
 
    Gestiona tot el que és igual als tres jocs: nivells, temps,
    intents, pistes de la Núria, puntuació, rècords, nivell on
-   s'havia quedat l'usuari, modals i mètriques.
+   s'havia quedat l'usuari, modals, mètriques i desar cada partida
+   a la base de dades.
    Cada joc només programa la mecànica dels seus nivells i avisa
    el motor quan l'usuari encerta o falla.
 
@@ -21,6 +22,8 @@
 
    El rècord i el nivell on s'havia quedat ja els desa el motor:
    els jocs no han de fer servir localStorage per a això.
+   Les partides també les envia el motor al servidor (POST /partides):
+   els jocs no han de fer cap fetch per desar-les.
 
    Ús des del JS de cada joc (per exemple, public/js/italia.js):
 
@@ -415,6 +418,7 @@ class MotorJoc {
         const punts = this.#puntsNivell();
         this.#puntsTotals += punts;
         this.#registrarMetrica(true, punts);
+        this.#desarPartida(true, punts);
 
         // Marca el nivell com a resolt a l'indicador
         const indicador = this.#indicador(this.#nivellActual);
@@ -451,6 +455,7 @@ class MotorJoc {
         this.#nivellEnCurs = false;
         this.#aturarTemps();
         this.#registrarMetrica(false, 0);
+        this.#desarPartida(false, 0);
 
         this.#obrirModal({
             eyebrow: `NIVELL ${this.#nivellActual} · ${this.#nomNivell()}`,
@@ -766,7 +771,49 @@ class MotorJoc {
     }
 
     /**
-     * Encara no hi ha cap ruta al servidor per guardar-les:
+     * Desa la partida a la base de dades amb un POST a PartidaController@store.
+     * Una fila per intent de nivell: guanyada en superar-lo, o perduda si
+     * s'acaben els intents o el temps (llavors la puntuació és 0).
+     * La URL la posa la plantilla a data-url-partides. Si falla la connexió,
+     * el joc continua igualment: només es perd aquesta fila.
+     * @param {boolean} guanyada
+     * @param {number} punts
+     */
+    async #desarPartida(guanyada, punts) {
+        const url = document.body.dataset.urlPartides;
+        if (!url) {
+            return;
+        }
+
+        const dades = {
+            codi: this.#codi,
+            nivell: this.#nivellActual,
+            guanyada,
+            durada: this.#segons,
+            errors: this.#errors,
+            punts: guanyada ? punts : 0,
+        };
+
+        try {
+            const resposta = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+                },
+                body: JSON.stringify(dades),
+            });
+            if (!resposta.ok) {
+                throw new Error(`HTTP ${resposta.status}`);
+            }
+        } catch (error) {
+            console.warn('No s\'ha pogut desar la partida:', error);
+        }
+    }
+
+    /**
+     * Les mètriques de la sessió encara no tenen ruta al servidor:
      * de moment es mostren a la consola (F12).
      */
     #enviarMetriques() {

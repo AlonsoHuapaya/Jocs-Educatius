@@ -127,6 +127,5 @@
         </form>
     </template>
 
-    {{-- data-url-partides: on el joc envia cada partida acabada (guanyada o perduda) --}}
-    <script src="{{ asset('js/espanya.js') }}" data-url-partides="{{ route('partides.store') }}"></script>
+    <script src="{{ asset('js/espanya.js') }}"></script>
 @endsection

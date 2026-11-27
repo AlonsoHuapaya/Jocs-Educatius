@@ -26,7 +26,8 @@
           data-codi="{{ $codi }}"
           data-usuari="{{ auth()->id() }}"
           data-nivell-inicial="1"
-          data-url-mapa="{{ route('inici') }}">
+          data-url-mapa="{{ route('inici') }}"
+          data-url-partides="{{ route('partides.store') }}">
 
         {{-- ===================== CAPÇALERA ===================== --}}
         <header class="joc-capcalera">

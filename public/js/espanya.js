@@ -17,9 +17,6 @@ function omplir(element, textos) {
 function fallar(motor, missatge) {
     motor.error();
     motor.diuNuria(missatge);
-    if (Number(document.getElementById('marcador-intents').textContent) <= 0) {
-        partides.enviar(false); // ha gastat els 3 intents: partida perduda
-    }
 }
 
 /* ---------- Tauler de fitxes: arrossegar o fer clic a la fitxa i després al lloc ----------
@@ -116,69 +113,6 @@ class TaulerFitxes {
     }
 }
 
-/* ---------- Partides a la base de dades ----------
-   Una partida s'acaba quan el nivell es completa (guanyada) o quan es gasten
-   els intents o s'acaba el temps (perduda). Llavors s'envia un POST a Laravel
-   (PartidaController@store), que desa una fila a la taula PARTIDA. */
-
-class EnviadorPartides {
-    #enviada = false;
-
-    constructor(url) {
-        this.url = url;
-    }
-
-    /** Es crida en començar cada nivell: la partida nova encara no s'ha enviat */
-    novaPartida() {
-        this.#enviada = false;
-    }
-
-    /** Segons jugats. Si el nivell té compte enrere, el marcador mostra el temps que queda. */
-    #segonsJugats() {
-        const [minuts, segons] = document.getElementById('marcador-temps').textContent.split(':').map(Number);
-        const mostrats = minuts * 60 + segons;
-        const limit = MotorJoc.DIFICULTAT[motor.nivell]?.temps;
-        return limit ? limit - mostrats : mostrats;
-    }
-
-    async enviar(guanyada) {
-        if (this.#enviada || !this.url) {
-            return;
-        }
-        this.#enviada = true; // una sola fila per partida
-
-        const dades = {
-            codi: document.body.dataset.codi,
-            nivell: motor.nivell,
-            guanyada,
-            durada: this.#segonsJugats(),
-            errors: Number(document.getElementById('estat-errors').textContent),
-            punts: guanyada ? Number(document.getElementById('marcador-punts').textContent) : 0,
-        };
-
-        try {
-            const resposta = await fetch(this.url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                },
-                body: JSON.stringify(dades),
-            });
-            if (!resposta.ok) {
-                throw new Error(`HTTP ${resposta.status}`);
-            }
-        } catch (error) {
-            // Si falla la connexió, el joc continua: només es perd aquesta fila
-            console.warn('No s\'ha pogut desar la partida:', error);
-        }
-    }
-}
-
-// La URL la posa la vista a l'etiqueta <script> (data-url-partides)
-const partides = new EnviadorPartides(document.currentScript?.dataset.urlPartides);
-
 /* ---------- Dades ---------- */
 
 // costat: on va la informació respecte del punt (per defecte, a sota)
@@ -207,30 +141,6 @@ const FETS_FRANQUISME = [
 const FORMAT_ANY = /^\d{4}$/; // exactament quatre xifres
 const [INICI, FI] = [1939, 1975];
 
-/* ---------- Progrés i rècords ---------- */
-
-const registre = new RegistreLocal('arxiu-historic.espanya');
-
-function mostrarRecord(nivell) {
-    document.getElementById('estat-record').textContent = registre.llegir(`record-${nivell}`)?.punts ?? '—';
-}
-
-/** Desa el rècord i el nivell següent (en acabar l'últim, es torna a començar) */
-function nivellCompletat(nivell) {
-    const punts = Number(document.getElementById('marcador-punts').textContent) || 0;
-    if (registre.desarRecord(nivell, punts)) {
-        mostrarRecord(nivell);
-        motor.diuNuria(`Nou rècord en aquest nivell: ${punts} punts!`);
-    }
-    registre.desar('nivell', nivell < NIVELLS.length ? nivell + 1 : 1);
-}
-
-// Si ja havia jugat, comença pel nivell on s'havia quedat
-document.body.dataset.nivellInicial = Math.max(
-    Number(document.body.dataset.nivellInicial) || 1,
-    registre.llegir('nivell', 1),
-);
-
 /* ---------- Nivells ---------- */
 
 const NIVELLS = [
@@ -246,9 +156,6 @@ const NIVELLS = [
         reptes: FETS_REPUBLICA.length,
 
         preparar(zona) {
-<<<<<<<<< Temporary merge branch 1
-            iniciNivell(1);
-            this.resolts = 0;
             // Tauler nou a cada partida: així el listener delegat no es duplica en reiniciar
             const arrel = clonar('plantilla-tauler');
             zona.appendChild(arrel);
@@ -300,12 +207,7 @@ const NIVELLS = [
         reptes: CONCEPTES_GUERRA.length,
 
         preparar(zona, motor) {
-<<<<<<<<< Temporary merge branch 1
-            iniciNivell(2);
-            const preguntes = barrejar(CONCEPTES_GUERRA);
-=========
             const preguntes = MotorJoc.barrejar(CONCEPTES_GUERRA);
->>>>>>>>> Temporary merge branch 2
             let actual = 0;
 
             const documentArxiu = clonar('plantilla-document');
@@ -360,12 +262,7 @@ const NIVELLS = [
         reptes: FETS_FRANQUISME.length,
 
         preparar(zona, motor) {
-<<<<<<<<< Temporary merge branch 1
-            iniciNivell(3);
-            const fets = barrejar(FETS_FRANQUISME);
-=========
             const fets = MotorJoc.barrejar(FETS_FRANQUISME);
->>>>>>>>> Temporary merge branch 2
             let actual = 0;
 
             const resultats = document.createElement('ol');
@@ -434,11 +331,3 @@ const NIVELLS = [
 ];
 
 const motor = new MotorJoc({ nivells: NIVELLS });
-
-// El motor no avisa quan s'acaba el temps: s'observa el rellotge amb un MutationObserver
-const rellotge = document.getElementById('marcador-temps');
-new MutationObserver(() => {
-    if (MotorJoc.DIFICULTAT[motor.nivell]?.temps && rellotge.textContent === '00:00') {
-        partides.enviar(false); // s'ha acabat el temps: partida perduda
-    }
-}).observe(rellotge, { childList: true, characterData: true, subtree: true });
